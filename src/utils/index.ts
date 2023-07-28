@@ -6,10 +6,10 @@ export const Direction = {
 } as const
 
 export class Velocity { 
-  speed: number;
-  direction: typeof Direction;
+  speed?: number;
+  direction?: keyof typeof Direction;
 
-  constructor(speed:number, direction: typeof Direction) {
+  constructor(speed?:number, direction?: keyof typeof Direction) {
     this.speed = speed
     this.direction = direction
   }
@@ -23,4 +23,12 @@ export class Position {
     this.x = x;
     this.y = y;
   }
+}
+
+export const random = (upperBound:number)=> { 
+  return Math.floor(Math.random() * upperBound);
+}
+
+export const pickRandom = (arr:any[]) => {
+  return arr[random(arr.length)];
 }

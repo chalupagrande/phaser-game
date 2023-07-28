@@ -6,11 +6,13 @@ import p5Types from "p5";
 export default class Board {
   xSize: number;
   ySize: number;
+  tileSize: number;
   board: Queue<Tile>[][];
 
-  constructor(xSize:number, ySize:number) {
+  constructor(xSize:number, ySize:number, tileSize:number) {
     this.xSize = xSize;
     this.ySize = ySize;
+    this.tileSize = tileSize;
     this.board = [];
     this.initBoard();  
   }
@@ -25,7 +27,9 @@ export default class Board {
   }
 
   addTile = (tile:Tile, position:Position) => {
-    this.board[position.x][position.y].enqueue(tile);; 
+    tile.position = position;
+    this.get(position).enqueue(tile);
+    console.log(this.get(position))
   }
 
   get(position:Position):Queue<Tile> {
@@ -33,21 +37,36 @@ export default class Board {
   }
 
 
-  render(p5:p5Types, tileSize:number){
-    drawBackground(p5, tileSize, this.xSize, this.ySize);
+  render(p5:p5Types){
+    this.drawBackground(p5);
+    this.drawTiles(p5);
   }
-}
 
-function drawBackground(p5: p5Types, tileSize: number, xSize: number, ySize: number){  
-  p5.background(255);
-  p5.stroke(0);
-  p5.strokeWeight(1);
-  for (let i = 0; i < xSize; i++) {
-    for(let j = 0; j < ySize; j++) {
-      p5.fill(255);
-      p5.rect(i * tileSize, j * tileSize, tileSize, tileSize);
+  drawBackground(p5: p5Types){  
+    p5.background(255);
+    p5.stroke(0);
+    p5.strokeWeight(1);
+    for (let i = 0; i < this.xSize; i++) {
+      for(let j = 0; j < this.ySize; j++) {
+        p5.fill(255);
+        p5.rect(i * this.tileSize, j * this.tileSize, this.tileSize, this.tileSize);
+      }
     }
   }
+
+
+  drawTiles(p5:p5Types) {
+    p5.stroke(0);
+    p5.strokeWeight(1);
+    for (let i = 0; i < this.xSize; i++) {
+      for(let j = 0; j < this.ySize; j++) {
+        const tileQueue = this.get(new Position(i, j))
+        const topTile = tileQueue.peek();
+        if(topTile) {
+          topTile.render(p5, this.tileSize)
+        }
+      }
+    }
+  }
+
 }
-
-

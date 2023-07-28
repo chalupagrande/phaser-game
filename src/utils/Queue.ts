@@ -18,6 +18,11 @@ export class Queue<T> implements IQueue<T> {
   dequeue(): T | undefined {
     return this.storage.shift();
   }
+
+  peek(): T | undefined {
+    return this.storage[0];
+  }
+
   size(): number {
     return this.storage.length;
   }

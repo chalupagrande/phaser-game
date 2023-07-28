@@ -44,7 +44,7 @@ const Game = () => {
         placeTile3: "3",
       })
     players = [player1, player2]
-    board = new Board(10, 10)
+    board = new Board(10, 10, tileSize)
     match = new Match(10, [player1, player2], board)
 
     console.log(match)
@@ -54,8 +54,8 @@ const Game = () => {
     p5.background(0);
     p5.ellipse(x, y, 70, 70);
     x+=direction;
-    board.render(p5, tileSize)
-    players.forEach(player => player.render(p5, tileSize))
+    board.render(p5)
+    players.forEach((player, i) => player.render(p5, tileSize, i))
   };
 
   const windowResized = (p5:p5Types) => {

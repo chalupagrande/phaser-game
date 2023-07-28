@@ -1,7 +1,7 @@
 import { Position } from "../utils";
 import { Queue } from "../utils/Queue";
 import Tile from "./Tile";
-import {P5Types} from "p5";
+import p5Types from "p5";
 
 export default class Board {
   xSize: number;
@@ -33,12 +33,12 @@ export default class Board {
   }
 
 
-  render(p5:P5Types){
-    drawBackground(p5, 50, this.xSize, this.ySize);
+  render(p5:p5Types, tileSize:number){
+    drawBackground(p5, tileSize, this.xSize, this.ySize);
   }
 }
 
-function drawBackground(p5: P5Types, tileSize: number, xSize: number, ySize: number){  
+function drawBackground(p5: p5Types, tileSize: number, xSize: number, ySize: number){  
   p5.background(255);
   p5.stroke(0);
   p5.strokeWeight(1);

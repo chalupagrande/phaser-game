@@ -10,7 +10,7 @@ export default class Match {
   constructor(winningScore:number, players: Player[], board:Board){
     this.board = board;
     this.players = players;
-    this.scoreboard = new Map()
+    this.scoreboard = new Map<Player, number>(players.map(player => [player, 0]));
     this.winningScore = winningScore;
   }
 }

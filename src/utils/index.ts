@@ -5,13 +5,11 @@ export const Direction = {
   RIGHT: "RIGHT"
 } as const
 
-export type DirectionType = typeof Direction[keyof typeof Direction]
-
 export class Velocity { 
   speed: number;
-  direction: DirectionType;
+  direction: typeof Direction;
 
-  constructor(speed:number, direction: DirectionType) {
+  constructor(speed:number, direction: typeof Direction) {
     this.speed = speed
     this.direction = direction
   }

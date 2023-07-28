@@ -1,4 +1,7 @@
+import { Position } from "../utils";
 import Board from "./Board";
+import Match from "./Match";
+import Player from "./Player";
 
 
 export default class Preloader extends Phaser.Scene {
@@ -10,8 +13,14 @@ export default class Preloader extends Phaser.Scene {
     }
 
     preload (){
-      const board = new Board(10, 10);
-      console.log(board);
+      const player1 = new Player(new Position(0, 0))
+      const player2 = new Player(new Position(0, 0))
+      const board = new Board(10, 10)
+      const match = new Match(10, [player1, player2], board)
+      console.log(match)
+
+
+
       this.loadText = this.add.text(512, 360, 'Loading ...', { fontFamily: 'Arial', fontSize: 74, color: '#e3f2ed' });
       this.loadText.setOrigin(0.5);
       this.loadText.setStroke('#203c5b', 6);

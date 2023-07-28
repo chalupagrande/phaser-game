@@ -1,7 +1,7 @@
-class Board {
+export default class Board {
   xSize: number;
   ySize: number;
-  board: number[][];
+  board: number[][][];
 
   constructor(xSize:number, ySize:number) {
     this.xSize = xSize;
@@ -14,7 +14,7 @@ class Board {
     for (let i = 0; i < this.xSize; i++) {
       this.board.push([]);
       for (let j = 0; j < this.ySize; j++) {
-        this.board[i].push(0);
+        this.board[i].push([]);
       }
     } 
   }

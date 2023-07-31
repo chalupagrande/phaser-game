@@ -26,14 +26,14 @@ export type TileType = keyof typeof TileTypes;
 export class Tile {
   position: p5Types.Vector;
   velocity: p5Types.Vector;
-  isPermanent: boolean = true;
   type: TileType;
+  isPermanent?: boolean = true;
 
-  constructor(position:p5Types.Vector, velocity:p5Types.Vector, isPermanent:boolean = true, type?: TileType){
+  constructor(position:p5Types.Vector, velocity:p5Types.Vector, type?: TileType, isPermanent?:boolean){
     this.position = position;
     this.velocity = velocity;
-    this.isPermanent = isPermanent;
     this.type = type || pickRandom(Object.keys(TileTypes) as TileType[]);
+    this.isPermanent = isPermanent;
   }
 
   render(p5:p5Types, tileSize:number, position?:p5Types.Vector){

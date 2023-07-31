@@ -6,12 +6,14 @@ export default class Ball {
   direction: p5Types.Vector;
   speed: number;
   ballGridPosition: p5Types.Vector;
+  nextBallGridPosition: p5Types.Vector;
 
   constructor(initialPosition: p5Types.Vector, initialVelocity: p5Types.Vector, speed:number = 1){
     this.position = initialPosition;
     this.direction = initialVelocity;
     this.speed = speed;
     this.ballGridPosition = initialPosition;
+    this.nextBallGridPosition = initialPosition;
   }
 
   render(p5:p5Types, tileSize:number, board:Board){
@@ -38,6 +40,7 @@ export default class Ball {
       this.position = nextPosition
     }
 
+    // grid position
     const nextBallGridPosition = p5.createVector(
       Math.floor(this.position.x / tileSize), 
       Math.floor(this.position.y / tileSize)
@@ -47,26 +50,26 @@ export default class Ball {
     } 
     if(this.direction.y < 0) {
       nextBallGridPosition.y += 1
-    } 
+    }
 
-     // check for tile on board
+    // check for tile on board
     if(!nextBallGridPosition.equals(this.ballGridPosition)) {
-      const tileQueue = board.get(this.ballGridPosition);
-      if(tileQueue.size() > 0) {
-        console.log(tileQueue.dequeue())
+      const tileQueue = board.get(nextBallGridPosition);
+      const tile = tileQueue.peek();
+      if(tile && !tile.isPermanent) {
+        tileQueue.dequeue();
       }
     }
 
     this.ballGridPosition = nextBallGridPosition
+    this.nextBallGridPosition = this.ballGridPosition.copy().add(this.direction)
 
     // draw grid
     p5.stroke(200,200,200)
     p5.strokeWeight(3)
     p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
-
-   
-   
-    
+    p5.stroke(200,0,200)
+    p5.rect(this.nextBallGridPosition.x * tileSize, this.nextBallGridPosition.y * tileSize, tileSize, tileSize)
   }
   
 }

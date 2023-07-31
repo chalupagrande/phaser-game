@@ -36,11 +36,11 @@ export default class Player {
 
   initQueueAndBank = (p5: p5Types, numTiles:number) => {
     for(let i = 0; i < numTiles; i++) {
-      this.feed.enqueue(new Tile(p5.createVector(0,0), p5.createVector(0,0,0), false));
+      this.feed.enqueue(new Tile(p5.createVector(0,0), p5.createVector(0,0,0)));
     }
 
     for(let j = 0; j < BANK_SIZE; j++) {
-      this.bank.push(new Tile(p5.createVector(0,0), p5.createVector(0,0,0), false));
+      this.bank.push(new Tile(p5.createVector(0,0), p5.createVector(0,0,0)));
     }
   }
 

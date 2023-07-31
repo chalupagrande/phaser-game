@@ -1,4 +1,4 @@
-import { Position, Velocity, pickRandom } from "../utils";
+import { pickRandom } from "../../utils";
 import p5Types from 'p5'
 
 const TileTypes = {
@@ -23,22 +23,22 @@ const TileTypes = {
 
 export type TileType = keyof typeof TileTypes;
 
-export default class Tile {
-  position: Position;
-  velocity: Velocity;
+export class Tile {
+  position: p5Types.Vector;
+  velocity: p5Types.Vector;
   isPermanent: boolean = true;
   type: TileType;
 
-  constructor(position:Position, velocity: Velocity, isPermanent:boolean = true, type?: TileType){
+  constructor(position:p5Types.Vector, velocity:p5Types.Vector, isPermanent:boolean = true, type?: TileType){
     this.position = position;
     this.velocity = velocity;
     this.isPermanent = isPermanent;
     this.type = type || pickRandom(Object.keys(TileTypes) as TileType[]);
   }
 
-  render(p5:p5Types, tileSize:number, position?:Position){
-    const color = p5.color(TileTypes[this.type].color)
-    p5.fill(color);
+  render(p5:p5Types, tileSize:number, position?:p5Types.Vector){
+    const color = TileTypes[this.type].color
+    p5.fill(color[0], color[1], color[2]);
     if(position) {
       p5.rect(position.x, position.y, tileSize, tileSize);
     } else {

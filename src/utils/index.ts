@@ -1,29 +1,9 @@
 export const Direction = {
-  UP: "UP",
-  DOWN: "DOWN",
-  LEFT: "LEFT",
-  RIGHT: "RIGHT"
+  UP: [0, -1],
+  DOWN: [0, 1],
+  LEFT: [-1, 0],
+  RIGHT: [1, 0]
 } as const
-
-export class Velocity { 
-  speed?: number;
-  direction?: keyof typeof Direction;
-
-  constructor(speed?:number, direction?: keyof typeof Direction) {
-    this.speed = speed
-    this.direction = direction
-  }
-}
-
-export class Position {
-  x: number;
-  y: number;
-
-  constructor(x:number, y:number) {
-    this.x = x;
-    this.y = y;
-  }
-}
 
 export const random = (upperBound:number)=> { 
   return Math.floor(Math.random() * upperBound);

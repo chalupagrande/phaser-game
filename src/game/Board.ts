@@ -1,6 +1,5 @@
-import { Position } from "../utils";
 import { Queue } from "../utils/Queue";
-import Tile from "./Tile";
+import { Tile } from "./Tiles";
 import p5Types from "p5";
 
 export default class Board {
@@ -26,13 +25,13 @@ export default class Board {
     } 
   }
 
-  addTile = (tile:Tile, position:Position) => {
+  addTile = (tile:Tile, position:p5Types.Vector) => {
     tile.position = position;
     this.get(position).enqueue(tile);
     console.log(this.get(position))
   }
 
-  get(position:Position):Queue<Tile> {
+  get(position:p5Types.Vector):Queue<Tile> {
     return this.board[position.x][position.y];
   }
 
@@ -54,13 +53,12 @@ export default class Board {
     }
   }
 
-
   drawTiles(p5:p5Types) {
     p5.stroke(0);
     p5.strokeWeight(1);
     for (let i = 0; i < this.xSize; i++) {
       for(let j = 0; j < this.ySize; j++) {
-        const tileQueue = this.get(new Position(i, j))
+        const tileQueue = this.get(p5.createVector(i, j))
         const topTile = tileQueue.peek();
         if(topTile) {
           topTile.render(p5, this.tileSize)

@@ -1,7 +1,6 @@
-import { Direction, Position, Velocity } from "../utils";
 import { Queue } from "../utils/Queue"
 import Board from "./Board";
-import Tile from "./Tile"
+import {Tile} from "./Tiles"
 import p5Types from "p5";
 
 
@@ -21,40 +20,39 @@ export type Controls = {
 
 export default class Player {
   feed: Queue<Tile>;
-  cursor: Position;
+  cursor: p5Types.Vector;
   color: p5Types.Color;
   controls: Controls;
   bank: (Tile | undefined)[];
 
-  constructor(startPosition: Position, color: p5Types.Color, controls: Controls){
+  constructor(p5: p5Types, startPosition: p5Types.Vector, color: p5Types.Color, controls: Controls){
     this.feed = new Queue<Tile>();
     this.bank = []
     this.cursor = startPosition;
     this.color = color;
     this.controls = controls;
-    this.initQueueAndBank(10)
+    this.initQueueAndBank(p5, 10)
   }
 
-  initQueueAndBank = (numTiles:number) => {
+  initQueueAndBank = (p5: p5Types, numTiles:number) => {
     for(let i = 0; i < numTiles; i++) {
-      this.feed.enqueue(new Tile(new Position(0,0), new Velocity(0, Direction.UP), false));
+      this.feed.enqueue(new Tile(p5.createVector(0,0), p5.createVector(0,0,0), false));
     }
 
     for(let j = 0; j < BANK_SIZE; j++) {
-      this.bank.push(new Tile(new Position(0,0), new Velocity(0, Direction.UP), false));
+      this.bank.push(new Tile(p5.createVector(0,0), p5.createVector(0,0,0), false));
     }
   }
 
-  handleKeyPress = (key:string, board:Board) => {
-    console.log("key pressed", key)
+  handleKeyPress = (p5: p5Types, key:string, board:Board) => {
     if (key === this.controls.up) {
-      this.moveCursor({x: this.cursor.x, y: this.cursor.y - 1});
+      this.moveCursor(p5.createVector(this.cursor.x, this.cursor.y - 1));
     } else if (key === this.controls.down) {
-      this.moveCursor({x: this.cursor.x, y: this.cursor.y + 1});
+      this.moveCursor(p5.createVector(this.cursor.x, this.cursor.y + 1));
     } else if (key === this.controls.left) {
-      this.moveCursor({x: this.cursor.x - 1, y: this.cursor.y});
+      this.moveCursor(p5.createVector(this.cursor.x - 1, this.cursor.y));
     } else if (key === this.controls.right) {
-      this.moveCursor({x: this.cursor.x + 1, y: this.cursor.y});
+      this.moveCursor(p5.createVector(this.cursor.x + 1, this.cursor.y));
     } else if(key === this.controls.placeTile1) {
       const tile = this.bank[0];
       this.bank[0] = this.feed.dequeue();
@@ -70,16 +68,16 @@ export default class Player {
     }
   }
 
-  moveCursor = (position: Position) => {
+  moveCursor = (position: p5Types.Vector) => {
     this.cursor = position;
   }
 
   render(p5: p5Types, tileSize: number, index: number){
     this.renderCursor(p5, tileSize);
     if(index === 0) {
-      this.renderBank(p5, new Position(10, 550), tileSize);
+      this.renderBank(p5, p5.createVector(10, 550), tileSize);
     } else {
-      this.renderBank(p5, new Position(450, 550), tileSize);
+      this.renderBank(p5, p5.createVector(450, 550), tileSize);
     }
   }
 
@@ -96,7 +94,7 @@ export default class Player {
     p5.rect(this.cursor.x * tileSize, this.cursor.y * tileSize, tileSize, tileSize);
   }
 
-  renderBank(p5:p5Types, position: Position, tileSize:number) {
+  renderBank(p5:p5Types, position: p5Types.Vector, tileSize:number) {
     p5.push()
     p5.translate(position.x, position.y);
     p5.stroke(0)
@@ -110,7 +108,7 @@ export default class Player {
         tile.render(
           p5, 
           tileSize, 
-          new Position(
+          p5.createVector(
             BANK_MARGIN * (i + 1) + (tileSize * i), 
             BANK_MARGIN
           )

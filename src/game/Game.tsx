@@ -1,4 +1,3 @@
-import React from 'react'
 import Sketch from "react-p5";
 import p5Types from "p5"; //Import this for typechecking and intellisense
 import Board from './Board';
@@ -15,6 +14,8 @@ let ball: Ball;
 
 
 const Game = () => {
+  let paused = false;
+
   const setup = (p5:p5Types, canvasParentRef:Element) => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     const player1 = new Player(
@@ -46,10 +47,11 @@ const Game = () => {
     players = [player1, player2]
     board = new Board(4, 4, tileSize)
     match = new Match(10, [player1, player2], board)
-    ball = new Ball(p5.createVector(0,0), p5.createVector(0,1,1))
+    ball = new Ball(p5.createVector(0,0), p5.createVector(1,0), 0.8)
   };
 
   const draw = (p5:p5Types) => {
+    if(paused) return;
     p5.background(0);
     board.render(p5)
     players.forEach((player, i) => player.render(p5, tileSize, i))
@@ -62,6 +64,9 @@ const Game = () => {
 
   const keyPressed = (p5:p5Types) => {
     const key = p5.key;
+    if(key === " ") {
+      paused = !paused;
+    } 
     players.forEach(player => player.handleKeyPress(p5, key, board))
   }
 

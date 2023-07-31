@@ -45,15 +45,19 @@ export default class Player {
   }
 
   handleKeyPress = (p5: p5Types, key:string, board:Board) => {
+    const cursor = this.cursor;
+    // move cursor
     if (key === this.controls.up) {
-      this.moveCursor(p5.createVector(this.cursor.x, this.cursor.y - 1));
+      this.moveCursor(p5.createVector(cursor.x, cursor.y - 1));
     } else if (key === this.controls.down) {
-      this.moveCursor(p5.createVector(this.cursor.x, this.cursor.y + 1));
+      this.moveCursor(p5.createVector(cursor.x, cursor.y + 1));
     } else if (key === this.controls.left) {
-      this.moveCursor(p5.createVector(this.cursor.x - 1, this.cursor.y));
+      this.moveCursor(p5.createVector(cursor.x - 1, cursor.y));
     } else if (key === this.controls.right) {
-      this.moveCursor(p5.createVector(this.cursor.x + 1, this.cursor.y));
-    } else if(key === this.controls.placeTile1) {
+      this.moveCursor(p5.createVector(cursor.x + 1, cursor.y));
+    } 
+    // place tile
+    else if(key === this.controls.placeTile1) {
       const tile = this.bank[0];
       this.bank[0] = this.feed.dequeue();
       this.placeTile(board, tile);

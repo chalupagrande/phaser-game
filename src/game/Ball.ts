@@ -3,15 +3,15 @@ import Board from './Board';
 
 export default class Ball {
   position: p5Types.Vector;
-  velocity: p5Types.Vector;
+  direction: p5Types.Vector;
+  speed: number;
   ballGridPosition: p5Types.Vector;
-  nextBallGridPosition: p5Types.Vector;
 
-  constructor(initialPosition: p5Types.Vector, initialVelocity: p5Types.Vector){
+  constructor(initialPosition: p5Types.Vector, initialVelocity: p5Types.Vector, speed:number = 1){
     this.position = initialPosition;
-    this.velocity = initialVelocity;
+    this.direction = initialVelocity;
+    this.speed = speed;
     this.ballGridPosition = initialPosition;
-    this.nextBallGridPosition = initialPosition;
   }
 
   render(p5:p5Types, tileSize:number, board:Board){
@@ -24,34 +24,48 @@ export default class Ball {
     p5.pop()
 
     // update
-    const nextPosition = this.position.copy().add(this.velocity);
+    const velocity = this.direction.copy().mult(this.speed);
+    const nextPosition = this.position.copy().add(velocity);
     const width = (board.xSize -1 ) * tileSize;
     const height = (board.ySize -1 )* tileSize;
 
-    // reflect 
+    // reflect & update
     if(nextPosition.x > width || nextPosition.x < 0 || nextPosition.y > height || nextPosition.y < 0) {
-      this.velocity.x *= -1;
-      this.velocity.y *= -1;
-      this.position.add(this.velocity);
+      this.direction.x *= -1;
+      this.direction.y *= -1;
+      this.position.add(this.direction);
     } else {
       this.position = nextPosition
     }
 
-    this.ballGridPosition = p5.createVector(
+    const nextBallGridPosition = p5.createVector(
       Math.floor(this.position.x / tileSize), 
       Math.floor(this.position.y / tileSize)
     );  
-    if(this.velocity.x < 0) {
-      this.ballGridPosition.x += 1
+    if(this.direction.x < 0) {
+      nextBallGridPosition.x += 1
     } 
-    if(this.velocity.y < 0) {
-      this.ballGridPosition.y += 1
+    if(this.direction.y < 0) {
+      nextBallGridPosition.y += 1
     } 
 
+     // check for tile on board
+    if(!nextBallGridPosition.equals(this.ballGridPosition)) {
+      const tileQueue = board.get(this.ballGridPosition);
+      if(tileQueue.size() > 0) {
+        console.log(tileQueue.dequeue())
+      }
+    }
+
+    this.ballGridPosition = nextBallGridPosition
+
+    // draw grid
     p5.stroke(200,200,200)
     p5.strokeWeight(3)
     p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
 
+   
+   
     
   }
   

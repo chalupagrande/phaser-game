@@ -45,9 +45,9 @@ const Game = () => {
         placeTile3: "3",
       })
     players = [player1, player2]
-    board = new Board(4, 4, tileSize)
+    board = new Board(5, 5, tileSize)
     match = new Match(10, [player1, player2], board)
-    ball = new Ball(p5.createVector(0,0), p5.createVector(1,0), 1)
+    ball = new Ball(tileSize, p5.createVector(0,0), p5.createVector(0,1), 1)
   };
 
   const draw = (p5:p5Types) => {
@@ -55,7 +55,7 @@ const Game = () => {
     p5.background(0);
     board.render(p5)
     players.forEach((player, i) => player.render(p5, tileSize, i))
-    ball.render(p5, tileSize, board)
+    ball.render(p5, board)
   };
 
   const windowResized = (p5:p5Types) => {

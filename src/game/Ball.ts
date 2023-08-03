@@ -7,69 +7,87 @@ export default class Ball {
   speed: number;
   ballGridPosition: p5Types.Vector;
   nextBallGridPosition: p5Types.Vector;
+  ballDiameter: number;
 
-  constructor(initialPosition: p5Types.Vector, initialVelocity: p5Types.Vector, speed:number = 1){
+  constructor(diameter: number, initialPosition: p5Types.Vector, initialVelocity: p5Types.Vector, speed:number = 1){
     this.position = initialPosition;
     this.direction = initialVelocity;
     this.speed = speed;
     this.ballGridPosition = initialPosition;
     this.nextBallGridPosition = initialPosition;
+    this.ballDiameter = diameter;
   }
 
-  render(p5:p5Types, tileSize:number, board:Board){
-    // render
-    p5.push()
-    p5.translate(tileSize/2, tileSize/2)
-    p5.noStroke()
-    p5.fill(0);
-    p5.circle(this.position.x, this.position.y, tileSize);
-    p5.pop()
-
-    // update
-    const velocity = this.direction.copy().mult(this.speed);
-    const nextPosition = this.position.copy().add(velocity);
-    const width = (board.xSize -1 ) * tileSize;
-    const height = (board.ySize -1 )* tileSize;
-
-    // reflect & update
-    if(nextPosition.x > width || nextPosition.x < 0 || nextPosition.y > height || nextPosition.y < 0) {
-      this.direction.x *= -1;
-      this.direction.y *= -1;
-      this.position.add(this.direction);
-    } else {
-      this.position = nextPosition
+  calculateNextPosition(board:Board) {
+    const {width, height} = board
+    let velocity = this.direction.copy().mult(this.speed);
+    // calculate next position
+    let nextPosition = this.position.copy().add(velocity);
+    if(nextPosition.x > width - this.ballDiameter || nextPosition.x < 0) {
+      this.direction.x *= -1 
+      velocity = this.direction.copy().mult(this.speed)
+      nextPosition = this.position.copy().add(velocity)
     }
+    if(nextPosition.y > height - this.ballDiameter || nextPosition.y < 0) {
+      this.direction.y *= -1
+      velocity = this.direction.copy().mult(this.speed)
+      nextPosition = this.position.copy().add(velocity)
+    }
+    return nextPosition
+  }
 
-    // grid position
-    const nextBallGridPosition = p5.createVector(
+  calculateGridPosition(p5:p5Types, board:Board) {
+    const {tileSize} = board
+  // calculate current GRID position
+  if(this.direction.x < 0 || this.direction.y < 0) {
+    return p5.createVector(
+      Math.floor((this.position.x + this.ballDiameter- 0.01) / tileSize), 
+      Math.floor((this.position.y + this.ballDiameter- 0.01) / tileSize)
+    )
+  } else {
+    return p5.createVector(
       Math.floor(this.position.x / tileSize), 
       Math.floor(this.position.y / tileSize)
     );  
-    if(this.direction.x < 0) {
-      nextBallGridPosition.x += 1
-    } 
-    if(this.direction.y < 0) {
-      nextBallGridPosition.y += 1
-    }
+  }
 
-    // check for tile on board
-    if(!nextBallGridPosition.equals(this.ballGridPosition)) {
-      const tileQueue = board.get(nextBallGridPosition);
+  } 
+
+  render(p5:p5Types, board:Board){
+    const {tileSize} = board
+
+    // render
+    p5.push()
+    p5.translate(this.ballDiameter/2, this.ballDiameter/2)
+    p5.noStroke()
+    p5.fill(0);
+    p5.circle(this.position.x, this.position.y, this.ballDiameter);
+    p5.pop()
+
+    let nextPosition = this.calculateNextPosition(board)
+    let gridPosition = this.calculateGridPosition(p5, board)
+
+    // calculate nextGridPosition
+    if(!gridPosition.equals(this.ballGridPosition)) {
+      const tileQueue = board.get(gridPosition);
       const tile = tileQueue.peek();
+      console.log(tile)
       if(tile && !tile.isPermanent) {
         tileQueue.dequeue();
+        tile.action(p5, board, this)
       }
     }
 
-    this.ballGridPosition = nextBallGridPosition
-    this.nextBallGridPosition = this.ballGridPosition.copy().add(this.direction)
+    nextPosition = this.calculateNextPosition(board)
+    gridPosition = this.calculateGridPosition(p5, board)
+    this.position = nextPosition
+    this.ballGridPosition = gridPosition
 
-    // draw grid
-    p5.stroke(200,200,200)
+  
+    // // draw grid
+    p5.stroke(0)
     p5.strokeWeight(3)
     p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
-    p5.stroke(200,0,200)
-    p5.rect(this.nextBallGridPosition.x * tileSize, this.nextBallGridPosition.y * tileSize, tileSize, tileSize)
   }
   
 }

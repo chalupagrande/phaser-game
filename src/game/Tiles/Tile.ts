@@ -1,35 +1,56 @@
 import { pickRandom } from "../../utils";
 import p5Types from 'p5'
+import Board from "../Board";
+import Ball from "../Ball";
 
 const TileTypes = {
-  "tile": {
-    color: [255,255,0]
+  "up": {
+    color: [255,0,0],
+    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+      ball.direction = p5.createVector(0,-1)
+    }
   }, 
-  "ball": {
-    color: [255,0,255]
+  "right": {
+    color: [0,255,0],
+    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+      ball.direction = p5.createVector(1,0)
+    }
   }, 
-  "player": {
-    color: [0,255,0]
+  "down": {
+    color: [0,0,255],
+    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+      ball.direction = p5.createVector(0,1)
+    }
   }, 
-  "wall": {
-    color: [0,255,255]
-  }, 
-  "goal": {
-    color: [0, 0, 255]
-  }, 
-  "empty": {
-    color: [0,0,0]}
+  // "left": {
+  //   color: [0,255,255],
+  //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+  //     ball.direction = p5.createVector(-1,0)
+  //   }
+  // }, 
+  // "goal": {
+  //   color: [0, 0, 255],
+  //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+  //     console.log(tile)
+  //   }
+  // }, 
+  // "wall": {
+  //   color: [0,0,0],
+  //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+  //     console.log(tile)
+  //   }
+  // }
 } as const;
 
 export type TileType = keyof typeof TileTypes;
 
 export class Tile {
   position: p5Types.Vector;
-  velocity: p5Types.Vector;
   type: TileType;
+  velocity?: p5Types.Vector;
   isPermanent?: boolean = true;
 
-  constructor(position:p5Types.Vector, velocity:p5Types.Vector, type?: TileType, isPermanent?:boolean){
+  constructor(position:p5Types.Vector, velocity?: p5Types.Vector, type?: TileType, isPermanent?:boolean){
     this.position = position;
     this.velocity = velocity;
     this.type = type || pickRandom(Object.keys(TileTypes) as TileType[]);
@@ -44,5 +65,9 @@ export class Tile {
     } else {
       p5.rect(this.position.x * tileSize, this.position.y * tileSize, tileSize, tileSize);
     }
+  }
+  action(p5:p5Types, board:Board, ball:Ball) {
+    const action = TileTypes[this.type].action
+    action(p5, board, ball, this)
   }
 }

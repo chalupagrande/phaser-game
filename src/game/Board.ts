@@ -5,12 +5,16 @@ import p5Types from "p5";
 export default class Board {
   xSize: number;
   ySize: number;
+  width: number;
+  height: number;
   tileSize: number;
   board: Queue<Tile>[][];
 
   constructor(xSize:number, ySize:number, tileSize:number) {
     this.xSize = xSize;
     this.ySize = ySize;
+    this.width = xSize * tileSize
+    this.height = ySize * tileSize
     this.tileSize = tileSize;
     this.board = [];
     this.initBoard();  

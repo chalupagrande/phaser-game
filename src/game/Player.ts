@@ -2,6 +2,7 @@ import { Queue } from "../utils/Queue"
 import Board from "./Board";
 import {Tile} from "./Tiles"
 import p5Types from "p5";
+import { random } from "../utils";
 
 
 const BANK_SIZE = 3;
@@ -19,6 +20,7 @@ export type Controls = {
 }
 
 export default class Player {
+  id: number;
   feed: Queue<Tile>;
   cursor: p5Types.Vector;
   color: p5Types.Color;
@@ -26,6 +28,7 @@ export default class Player {
   bank: (Tile | undefined)[];
 
   constructor(p5: p5Types, startPosition: p5Types.Vector, color: p5Types.Color, controls: Controls){
+    this.id = random(100000)
     this.feed = new Queue<Tile>();
     this.bank = []
     this.cursor = startPosition;
@@ -36,11 +39,11 @@ export default class Player {
 
   initQueueAndBank = (p5: p5Types, numTiles:number) => {
     for(let i = 0; i < numTiles; i++) {
-      this.feed.enqueue(new Tile(p5.createVector(0,0)));
+      this.feed.enqueue(new Tile(p5.createVector(0,0), this));
     }
 
     for(let j = 0; j < BANK_SIZE; j++) {
-      this.bank.push(new Tile(p5.createVector(0,0)));
+      this.bank.push(new Tile(p5.createVector(0,0), this));
     }
   }
 

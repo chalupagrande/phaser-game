@@ -2,6 +2,7 @@ import { pickRandom } from "../../utils";
 import p5Types from 'p5'
 import Board from "../Board";
 import Ball from "../Ball";
+import Player from "../Player";
 
 const TileTypes = {
   "up": {
@@ -49,12 +50,14 @@ export class Tile {
   type: TileType;
   velocity?: p5Types.Vector;
   isPermanent?: boolean = true;
+  owner?: Player;
 
-  constructor(position:p5Types.Vector, velocity?: p5Types.Vector, type?: TileType, isPermanent?:boolean){
+  constructor(position:p5Types.Vector, owner?: Player, velocity?: p5Types.Vector, type?: TileType, isPermanent?:boolean,){
     this.position = position;
     this.velocity = velocity;
     this.type = type || pickRandom(Object.keys(TileTypes) as TileType[]);
     this.isPermanent = isPermanent;
+    this.owner = owner;
   }
 
   render(p5:p5Types, tileSize:number, position?:p5Types.Vector){

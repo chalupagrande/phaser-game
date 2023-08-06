@@ -62,12 +62,16 @@ const Game = () => {
     p5.resizeCanvas(p5.windowWidth, p5.windowHeight)
   }
 
-  const keyPressed = (p5:p5Types) => {
+  const keyPressed = (p5:p5Types, event:UIEvent | undefined) => {
+    if(event?.preventDefault) {
+      event.preventDefault()
+    }
     const key = p5.key;
     if(key === " ") {
       paused = !paused;
     } 
     players.forEach(player => player.handleKeyPress(p5, key, board))
+    return false
   }
 
   return (<Sketch setup={setup} draw={draw} windowResized={windowResized} keyPressed={keyPressed}/>); 

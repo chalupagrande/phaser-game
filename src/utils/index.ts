@@ -12,3 +12,4 @@ export const random = (upperBound:number)=> {
 export const pickRandom = (arr:any[]) => {
   return arr[random(arr.length)];
 }
+

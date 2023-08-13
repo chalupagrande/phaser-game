@@ -47,7 +47,7 @@ const Game = () => {
     players = [player1, player2]
     board = new Board(5, 5, tileSize)
     match = new Match(10, [player1, player2], board)
-    ball = new Ball(tileSize, p5.createVector(0,0), p5.createVector(0,1), 1)
+    ball = new Ball(tileSize, p5.createVector(0,0), p5.createVector(0,1), 0.3)
   };
 
   const draw = (p5:p5Types) => {

@@ -3,6 +3,7 @@ import p5Types from 'p5'
 import Board from "../Board";
 import Ball from "../Ball";
 import Player from "../Player";
+import {emitter} from '../../utils/Events'
 
 const TileTypes = {
   "up": {
@@ -29,12 +30,12 @@ const TileTypes = {
   //     ball.direction = p5.createVector(-1,0)
   //   }
   // }, 
-  // "goal": {
-  //   color: [0, 0, 255],
-  //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
-  //     console.log(tile)
-  //   }
-  // }, 
+  "goal": {
+    color: [0, 255, 255],
+    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+      emitter.emit('goal', 0)
+    }
+  }, 
   // "wall": {
   //   color: [0,0,0],
   //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {

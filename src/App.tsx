@@ -1,19 +1,12 @@
-import React, {useState} from 'react'
+import React from 'react'
 import './App.css'
 import Game from './game/Game'
-import {Header} from './components/Header'
-import {Settings} from './components/Settings'
-import {Banks} from './components/Banks'
-import { AppContextProvider } from './components/AppContext'
+import { GameHud } from './components/GameHud'
 
-function App() {
+function App() {  
   return (
     <div>
-      <AppContextProvider>
-        <Header/>
-        <Settings/>
-        <Banks/>
-      </AppContextProvider>
+      <GameHud/>
       <Game/>
     </div>
   )

@@ -38,19 +38,18 @@ export default class Ball {
 
   calculateGridPosition(p5:p5Types, board:Board) {
     const {tileSize} = board
-  // calculate current GRID position
-  if(this.direction.x < 0 || this.direction.y < 0) {
-    return p5.createVector(
-      Math.floor((this.position.x + this.ballDiameter- 0.01) / tileSize), 
-      Math.floor((this.position.y + this.ballDiameter- 0.01) / tileSize)
-    )
-  } else {
-    return p5.createVector(
-      Math.floor(this.position.x / tileSize), 
-      Math.floor(this.position.y / tileSize)
-    );  
-  }
-
+    // calculate current GRID position
+    if(this.direction.x < 0 || this.direction.y < 0) {
+      return p5.createVector(
+        Math.floor((this.position.x + this.ballDiameter- 0.01) / tileSize), 
+        Math.floor((this.position.y + this.ballDiameter- 0.01) / tileSize)
+      )
+    } else {
+      return p5.createVector(
+        Math.floor(this.position.x / tileSize), 
+        Math.floor(this.position.y / tileSize)
+      );  
+    }
   } 
 
   render(p5:p5Types, board:Board){

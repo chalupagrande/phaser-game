@@ -1,12 +1,9 @@
 import React from 'react'
+import { Tile } from '../game/Tiles'
 
 const initialContextState = {
-    width: 10,
-    height: 10,
-    tileSize: 50,
-    players: 2,
-    player1Bank: [],
-    player2Bank: [],
+  playerBanks: [[],[]],
+  playerScores: [0,0]
 }
 
 export const AppContext = React.createContext({ctx: initialContextState, update: (newCtx: {}) => {}})

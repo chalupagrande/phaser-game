@@ -20,7 +20,7 @@ export type Controls = {
 }
 
 export default class Player {
-  id: number;
+  playerId: number;
   feed: Queue<Tile>;
   cursor: p5Types.Vector;
   color: p5Types.Color;
@@ -28,7 +28,7 @@ export default class Player {
   bank: (Tile | undefined)[];
 
   constructor(p5: p5Types, id: number, startPosition: p5Types.Vector, color: p5Types.Color, controls: Controls){
-    this.id = id
+    this.playerId = id
     this.feed = new Queue<Tile>();
     this.bank = []
     this.cursor = startPosition;
@@ -45,7 +45,7 @@ export default class Player {
     for(let j = 0; j < BANK_SIZE; j++) {
       this.bank.push(new Tile(p5.createVector(0,0), this));
     }
-    emitter.emit('updateBank', this.id, this.bank)
+    emitter.emit('updateBank', this.playerId, this.bank)
   }
 
   handleKeyPress = (p5: p5Types, key:string, board:Board) => {
@@ -65,14 +65,17 @@ export default class Player {
       const tile = this.bank[0];
       this.bank[0] = this.feed.dequeue();
       this.placeTile(board, tile);
+      emitter.emit('updateBank', this.playerId, this.bank)
     } else if(key === this.controls.placeTile2) {
       const tile = this.bank[1];
       this.bank[1] = this.feed.dequeue();
       this.placeTile(board, tile);
+      emitter.emit('updateBank', this.playerId, this.bank)
     } else if(key === this.controls.placeTile3) {
       const tile = this.bank[2];
       this.bank[2] = this.feed.dequeue();
       this.placeTile(board, tile);
+      emitter.emit('updateBank', this.playerId, this.bank)
     }
   }
 

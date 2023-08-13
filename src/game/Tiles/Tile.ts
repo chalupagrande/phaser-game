@@ -6,24 +6,24 @@ import Player from "../Player";
 import {emitter} from '../../utils/Events'
 
 const TileTypes = {
-  "up": {
-    color: [255,0,0],
-    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
-      ball.direction = p5.createVector(0,-1)
-    }
-  }, 
-  "right": {
-    color: [0,255,0],
-    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
-      ball.direction = p5.createVector(1,0)
-    }
-  }, 
-  "down": {
-    color: [0,0,255],
-    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
-      ball.direction = p5.createVector(0,1)
-    }
-  }, 
+  // "up": {
+  //   color: [255,0,0],
+  //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+  //     ball.direction = p5.createVector(0,-1)
+  //   }
+  // }, 
+  // "right": {
+  //   color: [0,255,0],
+  //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+  //     ball.direction = p5.createVector(1,0)
+  //   }
+  // }, 
+  // "down": {
+  //   color: [0,0,255],
+  //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+  //     ball.direction = p5.createVector(0,1)
+  //   }
+  // }, 
   // "left": {
   //   color: [0,255,255],
   //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
@@ -33,7 +33,7 @@ const TileTypes = {
   "goal": {
     color: [0, 255, 255],
     action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
-      emitter.emit('goal', 0)
+      emitter.emit('goal', tile?.owner?.playerId)
     }
   }, 
   // "wall": {

@@ -1,15 +1,14 @@
 import React from 'react'
-import {AppContext} from './AppContext'
+import { Tile } from '../game/Tiles'
 
-export const Banks = ()=> {
-  const {ctx} = React.useContext(AppContext)
-  console.log(ctx.player1Bank)
+export const Banks = ({banks}: {banks: Tile[][]})=> {
+  console.log("BANKKKSKS", banks)
   return (
     <div>
       <h1>Banks</h1>
-      {ctx.player1Bank.length}
+
       vs
-      {ctx.player2Bank.length}
+    
     </div>
   )
 }

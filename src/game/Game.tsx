@@ -20,6 +20,7 @@ const Game = () => {
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     const player1 = new Player(
       p5,
+      0,
       p5.createVector(0,0),
       p5.color(255,0,0), 
       {
@@ -33,6 +34,7 @@ const Game = () => {
       })
     const player2 = new Player(
       p5,
+      1,
       p5.createVector(2,2),
       p5.color(0,255,0),
       {
@@ -47,7 +49,7 @@ const Game = () => {
     players = [player1, player2]
     board = new Board(5, 5, tileSize)
     match = new Match(10, [player1, player2], board)
-    ball = new Ball(tileSize, p5.createVector(0,0), p5.createVector(0,1), 0.3)
+    ball = new Ball(tileSize, p5.createVector(0,0), p5.createVector(0,1), 1)
   };
 
   const draw = (p5:p5Types) => {

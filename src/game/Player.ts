@@ -2,7 +2,7 @@ import { Queue } from "../utils/Queue"
 import Board from "./Board";
 import {Tile} from "./Tiles"
 import p5Types from "p5";
-import { random } from "../utils";
+import { emitter } from "../utils/Events";
 
 
 const BANK_SIZE = 3;
@@ -27,8 +27,8 @@ export default class Player {
   controls: Controls;
   bank: (Tile | undefined)[];
 
-  constructor(p5: p5Types, startPosition: p5Types.Vector, color: p5Types.Color, controls: Controls){
-    this.id = random(100000)
+  constructor(p5: p5Types, id: number, startPosition: p5Types.Vector, color: p5Types.Color, controls: Controls){
+    this.id = id
     this.feed = new Queue<Tile>();
     this.bank = []
     this.cursor = startPosition;
@@ -45,6 +45,7 @@ export default class Player {
     for(let j = 0; j < BANK_SIZE; j++) {
       this.bank.push(new Tile(p5.createVector(0,0), this));
     }
+    emitter.emit('updateBank', this.id, this.bank)
   }
 
   handleKeyPress = (p5: p5Types, key:string, board:Board) => {

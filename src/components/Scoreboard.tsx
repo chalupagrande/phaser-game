@@ -1,6 +1,7 @@
 import React from 'react'
 
 export const Scoreboard = ({scores}: {scores: number[]})=> {
+  console.log("RENDERING SCORES", scores)
   return (
     <div>
       <h1>Score</h1>

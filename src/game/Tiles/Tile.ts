@@ -6,12 +6,12 @@ import Player from "../Player";
 import {emitter} from '../../utils/Events'
 
 const TileTypes = {
-  // "up": {
-  //   color: [255,0,0],
-  //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
-  //     ball.direction = p5.createVector(0,-1)
-  //   }
-  // }, 
+  "up": {
+    color: [255,0,0],
+    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+      ball.direction = p5.createVector(0,-1)
+    }
+  }, 
   // "right": {
   //   color: [0,255,0],
   //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {

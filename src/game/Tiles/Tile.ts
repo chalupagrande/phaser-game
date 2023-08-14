@@ -23,12 +23,13 @@ export class Tile {
     this.velocity = velocity;
     this.type = type || pickRandom(Object.keys(TileTypes) as TileType[]);
     this.owner = owner;
-    this.isPermanent = TileTypes[this.type].isPermanent;
+    this.isPermanent = TileTypes[this.type]?.isPermanent || false;
   }
 
   render(tileSize:number, position?:p5Types.Vector){
     const p5 = this.p5;
-    const color = TileTypes[this.type].color
+    const color = !this.isPermanent && this.owner ? this.owner.color: TileTypes[this.type].color
+    // render with player color
     p5.fill(color[0], color[1], color[2]);
     if(position) {
       p5.rect(position.x, position.y, tileSize, tileSize);

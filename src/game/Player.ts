@@ -22,7 +22,7 @@ export default class Player {
   playerId: number;
   feed: Queue<Tile>;
   cursor: p5Types.Vector;
-  color: p5Types.Color;
+  color: [number, number, number];
   controls: Controls;
   bank: (Tile | undefined)[];
   score: number;
@@ -32,7 +32,7 @@ export default class Player {
       updateGameStateFn: (update: (gameState:GameState, options?: GameOptions) => GameState) => void,
       id: number,
       startPosition: p5Types.Vector,
-      color: p5Types.Color,
+      color: [number, number, number],
       controls: Controls
     ){
     this.p5 = p5;

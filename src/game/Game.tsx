@@ -52,7 +52,7 @@ const Game = () => {
       updateGameState,
       0,
       p5.createVector(0,0),
-      p5.color(255,0,0), 
+      [255,0,0], 
       {
         up: "ArrowUp",
         down: "ArrowDown",
@@ -67,7 +67,7 @@ const Game = () => {
       updateGameState,
       1,
       p5.createVector(2,2),
-      p5.color(0,255,0),
+      [0,255,0],
       {
         up: "w",
         down: "s",

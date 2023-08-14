@@ -36,25 +36,26 @@ export default class Ball {
     return nextPosition
   }
 
-  calculateGridPosition(board:Board) {
+  calculateGridPosition(position: p5Types.Vector, board:Board) {
     const p5 = this.p5
     const {tileSize} = board
     // calculate current GRID position
     if(this.direction.x < 0 || this.direction.y < 0) {
       return p5.createVector(
-        Math.floor((this.position.x + this.ballDiameter- 0.01) / tileSize), 
-        Math.floor((this.position.y + this.ballDiameter- 0.01) / tileSize)
+        Math.floor((position.x + (this.ballDiameter- 0.1)) / tileSize), 
+        Math.floor((position.y + (this.ballDiameter- 0.1)) / tileSize)
       )
     } else {
       return p5.createVector(
-        Math.floor(this.position.x / tileSize), 
-        Math.floor(this.position.y / tileSize)
+        Math.floor(position.x / tileSize), 
+        Math.floor(position.y / tileSize)
       );  
     }
   }
 
   render(board:Board){
     const p5 = this.p5;
+    const {tileSize} = board
     // render
     p5.push()
     p5.translate(this.ballDiameter/2, this.ballDiameter/2)
@@ -64,9 +65,10 @@ export default class Ball {
     p5.pop()
 
     let nextPosition = this.calculateNextPosition(board)
-    let gridPosition = this.calculateGridPosition(board)
+    let gridPosition = this.calculateGridPosition(nextPosition, board)
 
     // calculate nextGridPosition
+    let possibleNextPosition;
     if(!gridPosition.equals(this.ballGridPosition)) {
       const tileQueue = board.get(gridPosition);
       const tile = tileQueue.peek();
@@ -77,17 +79,22 @@ export default class Ball {
         }
         tile.action(board, this)
       }
+      // TODO: 
+      // BALL_SIZE_ERROR
+      // This warps the ball to the top left corner of the tile, so when it is traveling
+      // up or left, it will be in the wrong position. 
+      // HOWEVER this is needed to adjust for weird multiples of SPEED and TILE_SIZE
+      possibleNextPosition = gridPosition.copy().mult(tileSize)
     }
 
-    nextPosition = this.calculateNextPosition(board)
-    gridPosition = this.calculateGridPosition(board)
-    this.position = nextPosition
+    let newNextPosition = possibleNextPosition || nextPosition
+    this.position = newNextPosition
     this.ballGridPosition = gridPosition
   
-    // // draw ball grid position
-    // p5.stroke(0)
-    // p5.strokeWeight(3)
-    // p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
+    // draw ball grid position
+    p5.stroke(0)
+    p5.strokeWeight(3)
+    p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
   }
   
 }

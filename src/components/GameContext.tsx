@@ -4,10 +4,11 @@ import Board from '../game/Board'
 import Player from '../game/Player'
 
 export const initialGameOptions = {
-  tileSize: 50,
+  tileSize: 80,
   boardTileWidth: 5,
   boardTileHeight: 5,
-  initialBallSpeed: 1
+  initialBallSpeed: 1,
+  ballSize: 20,
 }
 export const initialGameState ={
   players: [],

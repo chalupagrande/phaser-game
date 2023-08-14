@@ -89,7 +89,6 @@ export default class Player {
   }
 
   placeTile(tile: number | Tile, board:Board) {
-    console.log(tile)
     if(typeof tile === 'number') {
       const tileBankIndex = tile
       const tyle = this.bank[tile]

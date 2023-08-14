@@ -11,7 +11,6 @@ import {
   GameState
  } from '../components/GameContext';
 import { random } from '../utils';
-import { TileTypes } from './Tiles/TileTypes';
 import { Tile } from './Tiles';
 
 
@@ -21,7 +20,6 @@ let gameState:GameState = initialGameState
 const Game = () => {
   let paused = false;
   const {gameOptions: options, updateGameState} = useContext(GameContext)
-  console.log("GAME OPTIONS", options)
   // wrapper function that will update BOTH GameContext and internal game state
   // use this to keep internal game staten in sync with GameContext
   const updateGame = (update: (gameState:GameState, options?: GameOptions) => GameState) => {
@@ -31,7 +29,6 @@ const Game = () => {
   }
 
   const setup = (p5:p5Types, canvasParentRef:Element) => {
-    console.log("SETTING UP")
     // create canvas
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     const middleX = Math.floor(options.boardTileWidth/2)
@@ -42,7 +39,7 @@ const Game = () => {
       p5,
       updateGame,
       0,
-      p5.createVector(0,0),
+      p5.createVector(0,middleY),
       [255,0,0], 
       {
         up: "ArrowUp",
@@ -57,7 +54,7 @@ const Game = () => {
       p5,
       updateGame,
       1,
-      p5.createVector(2,2),
+      p5.createVector(options.boardTileWidth - 1,middleY),
       [0,255,0],
       {
         up: "w",
@@ -74,7 +71,13 @@ const Game = () => {
       const goalTileXPos = player.playerId === 0 ? 0 : options.boardTileWidth - 1
       return player.placeTile(new Tile(p5, p5.createVector(goalTileXPos, middleY), player, "goal"), board)
     })
-    const ball = new Ball(p5, options.tileSize, p5.createVector(middleX * options.tileSize, middleY*options.tileSize), randomBallDirection, options.initialBallSpeed)
+    const ball = new Ball(
+      p5, 
+      options.ballSize, 
+      p5.createVector(middleX * options.tileSize, middleY*options.tileSize), 
+      randomBallDirection, 
+      options.initialBallSpeed * 1
+      )
     // set the initial internal game state
     gameState = {...gameState, players, board, ball}
   };

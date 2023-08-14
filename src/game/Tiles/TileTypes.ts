@@ -45,16 +45,16 @@ export const TileTypes = {
     color: [0,255,255],
     isPermanent: false,
     action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
-      ball.speed = ball.speed * 1.5
+      ball.speed = ball.speed +1
     }
   }, 
-  "slow": {
-    color: [0,255,255],
-    isPermanent: false,
-    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
-      ball.speed = ball.speed * 0.5
-    }
-  }, 
+  // "slow": {
+  //   color: [0,255,255],
+  //   isPermanent: false,
+  //   action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+  //     ball.speed = ball.speed * 0.5
+  //   }
+  // }, 
   "goal": {
     color: [0, 255, 255],
     isPermanent: true,

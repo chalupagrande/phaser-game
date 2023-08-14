@@ -72,9 +72,11 @@ export default class Ball {
     if(!gridPosition.equals(this.ballGridPosition)) {
       const tileQueue = board.get(gridPosition);
       const tile = tileQueue.peek();
-      if(tile && !tile.isPermanent) {
-        tileQueue.dequeue();
-        tile.owner?.queueTile()
+      if(tile) {
+        if(!tile.isPermanent) {
+          tileQueue.dequeue();
+          tile.owner?.givePlayerNewTile()
+        }
         tile.action(board, this)
       }
     }

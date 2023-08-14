@@ -6,7 +6,7 @@ import p5Types from "p5";
 
 const BANK_SIZE = 3;
 
-export type Controls = {
+type Controls = {
   up: string,
   down: string,
   left: string,
@@ -29,7 +29,7 @@ export default class Player {
 
   constructor(
       p5: p5Types,
-      updateGameStateFn:(newGameState:any) => {},
+      updateGameStateFn: (update: (gameState:GameState, options?: GameOptions) => GameState) => void,
       id: number,
       startPosition: p5Types.Vector,
       color: p5Types.Color,
@@ -47,6 +47,19 @@ export default class Player {
     this.initQueueAndBank(10)
   }
 
+  // use this to update the GAME HUD whenever something on the player 
+  // changes, and needs to be reflected in the hud.
+  updatePlayerState = () => {
+    this.updateGameState((gameState:GameState)=> {
+      if(gameState.players) {
+        const playersCopy = [...gameState.players];
+        playersCopy[this.playerId] = this;
+        return { players: playersCopy }        
+      }
+      return gameState
+    })
+  }
+
   initQueueAndBank = (numTiles:number) => {
     const p5 = this.p5;
     for(let i = 0; i < numTiles; i++) {
@@ -60,31 +73,31 @@ export default class Player {
   }
 
   handleKeyPress = (key:string, board:Board) => {
-    this.moveCursor(key)
-    this.placeTile(key, board);
+    this.handleCursorKeyPress(key)
+    this.handleTileKeyPress(key, board);
   }
 
 
-  placeTile(key: string, board:Board){
+  handleTileKeyPress(key: string, board:Board){
     if(key === this.controls.placeTile1) {
-      const tile = this.bank[0];
-      this.bank[0] = this.feed.dequeue();
-      board.addTile(this.cursor, tile);
-      this.updatePlayerState()
+      this.placeTile(0, board);
     } else if(key === this.controls.placeTile2) {
-      const tile = this.bank[1];
-      this.bank[1] = this.feed.dequeue();
-      board.addTile(this.cursor, tile);
-      this.updatePlayerState()
+      this.placeTile(1, board);
     } else if(key === this.controls.placeTile3) {
-      const tile = this.bank[2];
-      this.bank[2] = this.feed.dequeue();
+      this.placeTile(2, board);
+    }
+  }
+
+  placeTile(tileIndex: number, board:Board) {
+    const tile = this.bank[tileIndex];
+    if(tile) {
+      this.bank[tileIndex] = this.feed.dequeue();
       board.addTile(this.cursor, tile);
       this.updatePlayerState()
     }
   }
 
-  moveCursor(key:string) {
+  handleCursorKeyPress(key:string) {
     const p5 = this.p5;
     const cursor = this.cursor;
     if (key === this.controls.up) {
@@ -98,29 +111,21 @@ export default class Player {
     } 
   }
 
-  queueTile() {
+  givePlayerNewTile() {
     const p5 = this.p5;
-    if(this.bank.length < BANK_SIZE) {
-      this.bank.push(new Tile(p5, p5.createVector(0,0), this));
+    const bankCopy = this.bank.filter((el) => el !== undefined) 
+    if(bankCopy.length < BANK_SIZE) {
+      const emptyIndex = this.bank.findIndex((el) => el === undefined)
+      this.bank[emptyIndex] = new Tile(p5, p5.createVector(0,0), this);
     } else {
       this.feed.enqueue(new Tile(p5, p5.createVector(0,0), this));
     }
+    this.updatePlayerState()
   }
 
   incrementScore() {
     this.score = this.score + 1
     this.updatePlayerState()
-  }
-
-  updatePlayerState = () => {
-    this.updateGameState((gameState:GameState)=> {
-      if(gameState.players) {
-        const playersCopy = [...gameState.players];
-        playersCopy[this.playerId] = this;
-        return { players: playersCopy }        
-      }
-      return gameState
-    })
   }
 
   //   ___  ___    ___      _____ _  _  ___ 
@@ -133,7 +138,6 @@ export default class Player {
     this.render(tileSize)
   }
                                         
-
   renderCursor(tileSize:number) {
     const p5 = this.p5;
     p5.stroke(this.color);

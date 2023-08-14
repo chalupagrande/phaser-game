@@ -33,12 +33,14 @@ let gameState:GameState = initialGameState
 
 const Game = () => {
   let paused = false;
-  const {updateContext} = useContext(GameContext)
+  const {updateGameContext} = useContext(GameContext)
 
+  // wrapper function that will update BOTH GameContext and internal game state
+  // use this to keep internal game staten in sync with GameContext
   const updateGameState = (update: (gameState:GameState, options?: GameOptions) => GameState) => {
     const newGameState = update(gameState, OPTIONS)
     gameState = {...gameState, ...newGameState}
-    updateContext(gameState)
+    updateGameContext(gameState)
   }
 
   const setup = (p5:p5Types, canvasParentRef:Element) => {
@@ -78,8 +80,8 @@ const Game = () => {
     const players = [player1, player2]
     const board = new Board(p5, OPTIONS.boardXSize, OPTIONS.boardYSize, OPTIONS.tileSize)
     const ball = new Ball(p5, OPTIONS.tileSize, p5.createVector(0,0), p5.createVector(0,1), 2)
+    // set the initial internal game state
     gameState = {...gameState, players, board, ball}
-    console.log("GAME STATE SETIP", gameState)
   };
 
   const draw = (p5:p5Types) => {
@@ -107,7 +109,7 @@ const Game = () => {
     } 
 
     const {players, board} = gameState
-    if(Array.isArray(players) && players.length > 0) {
+    if(Array.isArray(players) && players.length > 0 && board) {
       players.forEach(player => player.handleKeyPress(key, board))
     }
     return false

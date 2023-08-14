@@ -31,9 +31,11 @@ export default class Board {
     } 
   }
 
-  addTile = (tile:Tile, position:p5Types.Vector) => {
-    tile.position = position;
-    this.get(position).enqueue(tile);
+  addTile = (position:p5Types.Vector, tile?:Tile) => {
+    if(tile) {
+      tile.position = position;
+      this.get(position).enqueue(tile);
+    }
   }
 
   get(position:p5Types.Vector):Queue<Tile> {

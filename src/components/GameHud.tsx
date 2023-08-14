@@ -1,42 +1,21 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Scoreboard } from './Scoreboard'
-import { emitter } from '../utils/Events'
-import { Tile } from '../game/Tiles'
 import { Banks } from './Banks'
+import { GameContext } from './GameContext'
+import Player from '../game/Player'
 
 
 
 export const GameHud  = ()=> {
-  const [playerScores, setPlayerScores] = React.useState([0,0])
-  const [playerBanks, setPlayerBanks] = React.useState<Tile[][]>([])
-
-  const updateScore = (player: number) => {
-    const newScores = [...playerScores]
-    newScores[player] = playerScores[player] + 1
-    setPlayerScores(newScores)
-  }
-
-  useEffect(()=> {
-    const unbindGoal = emitter.on('goal', (player: number) => {
-      updateScore(player)
-    })
-
-    const unbindBank = emitter.on('updateBank', (player: number, bank: Tile[]) => {
-      const newBanks = [...playerBanks]
-      newBanks[player] = bank
-      setPlayerBanks(newBanks)
-    })
-
-    return () => {
-      unbindBank()
-      unbindGoal()
-    }
-  })
-
+  const gameState = React.useContext(GameContext)
+  const players = gameState.players
+  console.log("GAME STATE", gameState)
+  const scores = players.map((p: Player) => p.score)
+  const banks = players.map((p: Player) => p.bank)
   return (
     <div>
-      <Scoreboard scores={playerScores}/>
-      <Banks banks={playerBanks}/>
+      <Scoreboard scores={scores}/>
+      <Banks banks={banks}/>
     </div>
   )
 }

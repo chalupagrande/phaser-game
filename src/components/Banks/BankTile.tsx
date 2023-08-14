@@ -2,7 +2,11 @@ import React from 'react'
 import { Tile } from '../../game/Tiles'
 import './BankTile.css'
 
-export const BankTile = ({tile}: {tile: Tile})=> {
+
+export type BankTileProps = {
+  tile?: Tile
+}
+export const BankTile = ({tile}: BankTileProps)=> {
 
   const direction = tile?.type || 'EMPTY'
   return (

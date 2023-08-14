@@ -3,7 +3,6 @@ import p5Types from 'p5'
 import Board from "../Board";
 import Ball from "../Ball";
 import Player from "../Player";
-import {emitter} from '../../utils/Events'
 
 const TileTypes = {
   "up": {
@@ -33,7 +32,7 @@ const TileTypes = {
   "goal": {
     color: [0, 255, 255],
     action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
-      emitter.emit('goal', tile?.owner?.playerId)
+      tile.owner.incrementScore()
     }
   }, 
   // "wall": {

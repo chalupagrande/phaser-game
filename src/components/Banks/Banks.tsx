@@ -2,7 +2,7 @@ import React from 'react'
 import { Tile } from '../../game/Tiles'
 import { BankTile } from './BankTile'
 
-export const Banks = ({banks}: {banks: Tile[][]})=> {
+export const Banks = ({banks}: {banks: (Tile | undefined)[][]})=> {
   
   const bank1 = banks[0]
   const bank2 = banks[1]

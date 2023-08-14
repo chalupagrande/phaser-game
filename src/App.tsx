@@ -1,16 +1,22 @@
-import React from 'react'
 import './App.css'
-import Game from './game/Game'
-import { GameHud } from './components/GameHud'
 import { GameContextProvider } from './components/GameContext'
+import { Route } from 'wouter'
+import StartScreen from './screens/StartScreen'
+import SettingsScreen from './screens/SettingsScreen'
+import GameScreen from './screens/GameScreen'
 
 function App() {  
   return (
     <GameContextProvider>
-      <div>
-        <GameHud/>
-        <Game/>
-      </div>
+      <Route path="/">
+        <StartScreen/>
+      </Route>
+      <Route path="/game">
+        <GameScreen/>
+      </Route>
+      <Route path="/settings">
+        <SettingsScreen/>
+      </Route>
     </GameContextProvider>
   )
 }

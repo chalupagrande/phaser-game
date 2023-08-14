@@ -1,6 +1,6 @@
 import { Queue } from "../utils/Queue"
 import Board from "./Board";
-import { GameOptions, GameState } from "./Game";
+import { GameOptions, GameState } from "../components/GameContext";
 import {Tile} from "./Tiles"
 import p5Types from "p5";
 

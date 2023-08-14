@@ -6,9 +6,6 @@ import Player from "../Player";
 import { TileType, TileTypes } from "./TileTypes";
 
 
-
-
-
 export class Tile {
   p5: p5Types;
   position: p5Types.Vector;
@@ -17,7 +14,7 @@ export class Tile {
   owner?: Player;
   isPermanent: boolean = false;
 
-  constructor(p5: p5Types, position:p5Types.Vector, owner?: Player, velocity?: p5Types.Vector, type?: TileType, isPermanent?:boolean,){
+  constructor(p5: p5Types, position:p5Types.Vector, owner?: Player, velocity?: p5Types.Vector, type?: TileType){
     this.p5 = p5;
     this.position = position;
     this.velocity = velocity;

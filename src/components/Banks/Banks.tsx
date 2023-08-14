@@ -1,23 +1,30 @@
 import React from 'react'
 import { Tile } from '../../game/Tiles'
 import { BankTile } from './BankTile'
+import './Bank.css'
 
-export const Banks = ({banks}: {banks: (Tile | undefined)[][]})=> {
-  
+
+const PlayerBank = ({playerNumber, bank}: {playerNumber: number, bank: (Tile | undefined)[]}) => {
+  return (
+    <div className="bank-wrapper column">
+      <h3>Player {playerNumber}</h3>
+      <div className='row'>
+        {bank.map((tile, i)=> <BankTile key={i} tile={tile}/>)}
+      </div>
+    </div>
+  )
+}
+
+export const Banks = ({banks}: {banks: (Tile | undefined)[][]})=> {  
   const bank1 = banks[0]
   const bank2 = banks[1]
 
   if(!bank1 || !bank2) return (<div>loading...</div>)
 
   return (
-    <div>
-      <h1>Banks</h1>
-      <div style={{display: 'flex', flexDirection: 'row'}}>
-      {bank1.map((tile, i)=> <BankTile key={i} tile={tile}/>)}
-      <br/>
-      vs
-      {bank2.map((tile, i)=> <BankTile key={i} tile={tile}/>)}
-      </div>
+    <div className='row'>
+      {banks.map((bank, i)=> <PlayerBank key={i} playerNumber={i+1} bank={bank}/>)}
     </div>
   )
 }
+

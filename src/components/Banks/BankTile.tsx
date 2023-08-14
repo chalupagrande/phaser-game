@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tile } from '../../game/Tiles'
-import './BankTile.css'
+import './Bank.css'
 
 
 export type BankTileProps = {

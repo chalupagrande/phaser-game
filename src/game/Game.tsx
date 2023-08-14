@@ -4,52 +4,37 @@ import p5Types from "p5"; //Import this for typechecking and intellisense
 import Board from './Board';
 import Player from './Player';
 import Ball from './Ball';
-import { GameContext } from '../components/GameContext';
+import { 
+  GameContext, 
+  GameOptions, 
+  initialGameState, 
+  GameState
+ } from '../components/GameContext';
 
-
-const OPTIONS = {
-  tileSize: 50,
-  boardXSize: 5,
-  boardYSize: 5, 
-}
-
-export type GameOptions = typeof OPTIONS
-
-export const initialGameState = {
-  players: [],
-  board: null,
-  ball: null,
-  tileSize: 50
-}
-
-export type GameState = {
-  players?: Player[],
-  board?: Board | null,
-  ball?: Ball | null,
-}
 
 // initialize internal game state
 let gameState:GameState = initialGameState
 
 const Game = () => {
   let paused = false;
-  const {updateGameContext} = useContext(GameContext)
-
+  const {gameOptions: options, updateGameState} = useContext(GameContext)
+  console.log("GAME OPTIONS", options)
   // wrapper function that will update BOTH GameContext and internal game state
   // use this to keep internal game staten in sync with GameContext
-  const updateGameState = (update: (gameState:GameState, options?: GameOptions) => GameState) => {
-    const newGameState = update(gameState, OPTIONS)
+  const updateGame = (update: (gameState:GameState, options?: GameOptions) => GameState) => {
+    const newGameState = update(gameState, options)
     gameState = {...gameState, ...newGameState}
-    updateGameContext(gameState)
+    updateGameState(gameState)
   }
 
   const setup = (p5:p5Types, canvasParentRef:Element) => {
+    console.log("SETTING UP")
     // create canvas
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     // initialize players
     const player1 = new Player(
       p5,
-      updateGameState,
+      updateGame,
       0,
       p5.createVector(0,0),
       [255,0,0], 
@@ -64,7 +49,7 @@ const Game = () => {
       })
     const player2 = new Player(
       p5,
-      updateGameState,
+      updateGame,
       1,
       p5.createVector(2,2),
       [0,255,0],
@@ -78,8 +63,8 @@ const Game = () => {
         placeTile3: "3",
       })
     const players = [player1, player2]
-    const board = new Board(p5, OPTIONS.boardXSize, OPTIONS.boardYSize, OPTIONS.tileSize)
-    const ball = new Ball(p5, OPTIONS.tileSize, p5.createVector(0,0), p5.createVector(0,1), 2)
+    const board = new Board(p5, options.boardTileWidth, options.boardTileHeight, options.tileSize)
+    const ball = new Ball(p5, options.tileSize, p5.createVector(0,0), p5.createVector(0,1), options.initialBallSpeed)
     // set the initial internal game state
     gameState = {...gameState, players, board, ball}
   };
@@ -90,7 +75,7 @@ const Game = () => {
     if(board && ball && Array.isArray(players) && players.length > 0) {
       p5.background(0);
       board.render()
-      players.forEach((player) => player.update(gameState, OPTIONS))
+      players.forEach((player) => player.update(gameState, options))
       ball.render(board)
     }
   };
@@ -118,4 +103,4 @@ const Game = () => {
   return (<Sketch setup={setup} draw={draw} windowResized={windowResized} keyPressed={keyPressed}/>); 
 }
 
-export default React.memo(Game, (prevProps, nextProps) => false)
+export default React.memo(Game, () => false)

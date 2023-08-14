@@ -7,9 +7,8 @@ import Player from '../game/Player'
 
 
 export const GameHud  = ()=> {
-  const gameState = React.useContext(GameContext)
+  const {gameState} = React.useContext(GameContext)
   const players = gameState.players
-  console.log("GAME STATE", gameState)
   const scores = players.map((p: Player) => p.score)
   const banks = players.map((p: Player) => p.bank)
   return (

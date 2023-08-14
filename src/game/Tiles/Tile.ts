@@ -3,22 +3,20 @@ import p5Types from 'p5'
 import Board from "../Board";
 import Ball from "../Ball";
 import Player from "../Player";
-import { TileType, TileTypes } from "./TileTypes";
+import { PlayableTileTypeKeys, TileType, TileTypes } from "./TileTypes";
 
 
 export class Tile {
   p5: p5Types;
   position: p5Types.Vector;
   type: TileType;
-  velocity?: p5Types.Vector;
-  owner?: Player;
+  owner: Player;
   isPermanent: boolean = false;
 
-  constructor(p5: p5Types, position:p5Types.Vector, owner?: Player, velocity?: p5Types.Vector, type?: TileType){
+  constructor(p5: p5Types, position:p5Types.Vector, owner: Player, type?: TileType){
     this.p5 = p5;
     this.position = position;
-    this.velocity = velocity;
-    this.type = type || pickRandom(Object.keys(TileTypes) as TileType[]);
+    this.type = type || pickRandom(PlayableTileTypeKeys);
     this.owner = owner;
     this.isPermanent = TileTypes[this.type]?.isPermanent || false;
   }

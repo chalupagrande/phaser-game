@@ -88,11 +88,16 @@ export default class Player {
     }
   }
 
-  placeTile(tileIndex: number, board:Board) {
-    const tile = this.bank[tileIndex];
-    if(tile) {
-      this.bank[tileIndex] = this.feed.dequeue();
-      board.addTile(this.cursor, tile);
+  placeTile(tile: number | Tile, board:Board) {
+    console.log(tile)
+    if(typeof tile === 'number') {
+      const tileBankIndex = tile
+      const tyle = this.bank[tile]
+      this.bank[tileBankIndex] = this.feed.dequeue();
+      board.addTile(this.cursor, tyle);
+      this.updatePlayerState()
+    } else {
+      board.addTile(tile.position, tile);
       this.updatePlayerState()
     }
   }

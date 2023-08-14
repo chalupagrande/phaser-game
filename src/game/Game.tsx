@@ -10,6 +10,9 @@ import {
   initialGameState, 
   GameState
  } from '../components/GameContext';
+import { random } from '../utils';
+import { TileTypes } from './Tiles/TileTypes';
+import { Tile } from './Tiles';
 
 
 // initialize internal game state
@@ -31,6 +34,9 @@ const Game = () => {
     console.log("SETTING UP")
     // create canvas
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
+    const middleX = Math.floor(options.boardTileWidth/2)
+    const middleY = Math.floor(options.boardTileHeight/2)
+    const randomBallDirection = random(2) === 0 ? p5.createVector(0,-1) : p5.createVector(0,1)
     // initialize players
     const player1 = new Player(
       p5,
@@ -64,7 +70,11 @@ const Game = () => {
       })
     const players = [player1, player2]
     const board = new Board(p5, options.boardTileWidth, options.boardTileHeight, options.tileSize)
-    const ball = new Ball(p5, options.tileSize, p5.createVector(0,0), p5.createVector(0,1), options.initialBallSpeed)
+    players.map(player => {
+      const goalTileXPos = player.playerId === 0 ? 0 : options.boardTileWidth - 1
+      return player.placeTile(new Tile(p5, p5.createVector(goalTileXPos, middleY), player, "goal"), board)
+    })
+    const ball = new Ball(p5, options.tileSize, p5.createVector(middleX * options.tileSize, middleY*options.tileSize), randomBallDirection, options.initialBallSpeed)
     // set the initial internal game state
     gameState = {...gameState, players, board, ball}
   };

@@ -41,6 +41,20 @@ export const TileTypes = {
       ball.direction = p5.createVector(-1,0)
     }
   }, 
+  "fast": {
+    color: [0,255,255],
+    isPermanent: false,
+    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+      ball.speed = ball.speed * 1.5
+    }
+  }, 
+  "slow": {
+    color: [0,255,255],
+    isPermanent: false,
+    action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
+      ball.speed = ball.speed * 0.5
+    }
+  }, 
   "goal": {
     color: [0, 255, 255],
     isPermanent: true,
@@ -55,5 +69,9 @@ export const TileTypes = {
   //   }
   // }
 } as const;
+
+
+export const TileTypeKeys = Object.keys(TileTypes) as TileType[]
+export const PlayableTileTypeKeys = TileTypeKeys.filter((key) => !TileTypes[key].isPermanent)
 
 export type TileType = keyof typeof TileTypes;

@@ -7,16 +7,14 @@ export default class Ball {
   direction: p5Types.Vector;
   speed: number;
   ballGridPosition: p5Types.Vector;
-  nextBallGridPosition: p5Types.Vector;
   ballDiameter: number;
 
-  constructor(p5: p5Types, diameter: number, initialPosition: p5Types.Vector, initialVelocity: p5Types.Vector, speed:number = 1){
+  constructor(p5: p5Types, diameter: number, initialGridPosition: p5Types.Vector, initialVelocity: p5Types.Vector, speed:number = 1){
     this.p5 = p5;
-    this.position = initialPosition;
+    this.position = initialGridPosition;
     this.direction = initialVelocity;
     this.speed = speed;
-    this.ballGridPosition = initialPosition;
-    this.nextBallGridPosition = initialPosition;
+    this.ballGridPosition = initialGridPosition;
     this.ballDiameter = diameter;
   }
 
@@ -38,7 +36,7 @@ export default class Ball {
     return nextPosition
   }
 
-  calculateGridPosition( board:Board) {
+  calculateGridPosition(board:Board) {
     const p5 = this.p5
     const {tileSize} = board
     // calculate current GRID position
@@ -53,7 +51,7 @@ export default class Ball {
         Math.floor(this.position.y / tileSize)
       );  
     }
-  } 
+  }
 
   render(board:Board){
     const p5 = this.p5;

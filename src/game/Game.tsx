@@ -47,17 +47,17 @@ const Game = () => {
         placeTile3: "3",
       })
     players = [player1, player2]
-    board = new Board(5, 5, tileSize)
+    board = new Board(p5, 5, 5, tileSize)
     match = new Match(10, [player1, player2], board)
-    ball = new Ball(tileSize, p5.createVector(0,0), p5.createVector(0,1), 1)
+    ball = new Ball(p5, tileSize, p5.createVector(0,0), p5.createVector(0,1), 2)
   };
 
   const draw = (p5:p5Types) => {
     if(paused) return;
     p5.background(0);
-    board.render(p5)
-    players.forEach((player, i) => player.render(p5, tileSize, i))
-    ball.render(p5, board)
+    board.render()
+    players.forEach((player, i) => player.render(tileSize, i))
+    ball.render(board)
   };
 
   const windowResized = (p5:p5Types) => {
@@ -72,7 +72,7 @@ const Game = () => {
     if(key === " ") {
       paused = !paused;
     } 
-    players.forEach(player => player.handleKeyPress(p5, key, board))
+    players.forEach(player => player.handleKeyPress(key, board))
     return false
   }
 

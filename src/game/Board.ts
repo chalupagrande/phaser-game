@@ -3,6 +3,7 @@ import { Tile } from "./Tiles";
 import p5Types from "p5";
 
 export default class Board {
+  p5: p5Types;
   xSize: number;
   ySize: number;
   width: number;
@@ -10,7 +11,8 @@ export default class Board {
   tileSize: number;
   board: Queue<Tile>[][];
 
-  constructor(xSize:number, ySize:number, tileSize:number) {
+  constructor(p5: p5Types, xSize:number, ySize:number, tileSize:number) {
+    this.p5 = p5;
     this.xSize = xSize;
     this.ySize = ySize;
     this.width = xSize * tileSize
@@ -39,12 +41,13 @@ export default class Board {
   }
 
 
-  render(p5:p5Types){
-    this.drawBackground(p5);
-    this.drawTiles(p5);
+  render(){
+    this.drawBackground();
+    this.drawTiles();
   }
 
-  drawBackground(p5: p5Types){  
+  drawBackground(){  
+    const p5 = this.p5;
     p5.background(255);
     p5.stroke(0);
     p5.strokeWeight(1);
@@ -56,7 +59,8 @@ export default class Board {
     }
   }
 
-  drawTiles(p5:p5Types) {
+  drawTiles() {
+    const p5 = this.p5;
     p5.stroke(0);
     p5.strokeWeight(1);
     for (let i = 0; i < this.xSize; i++) {
@@ -64,7 +68,7 @@ export default class Board {
         const tileQueue = this.get(p5.createVector(i, j))
         const topTile = tileQueue.peek();
         if(topTile) {
-          topTile.render(p5, this.tileSize)
+          topTile.render(this.tileSize)
         }
       }
     }

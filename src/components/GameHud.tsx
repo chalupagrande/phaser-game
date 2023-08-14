@@ -33,8 +33,6 @@ export const GameHud  = ()=> {
     }
   })
 
-  console.log(emitter.events)
-
   return (
     <div>
       <Scoreboard scores={playerScores}/>

@@ -20,6 +20,7 @@ export type Controls = {
 }
 
 export default class Player {
+  p5: p5Types;
   playerId: number;
   feed: Queue<Tile>;
   cursor: p5Types.Vector;
@@ -28,27 +29,30 @@ export default class Player {
   bank: (Tile | undefined)[];
 
   constructor(p5: p5Types, id: number, startPosition: p5Types.Vector, color: p5Types.Color, controls: Controls){
+    this.p5 = p5;
     this.playerId = id
     this.feed = new Queue<Tile>();
     this.bank = []
     this.cursor = startPosition;
     this.color = color;
     this.controls = controls;
-    this.initQueueAndBank(p5, 10)
+    this.initQueueAndBank(10)
   }
 
-  initQueueAndBank = (p5: p5Types, numTiles:number) => {
+  initQueueAndBank = (numTiles:number) => {
+    const p5 = this.p5;
     for(let i = 0; i < numTiles; i++) {
-      this.feed.enqueue(new Tile(p5.createVector(0,0), this));
+      this.feed.enqueue(new Tile(p5, p5.createVector(0,0), this));
     }
 
     for(let j = 0; j < BANK_SIZE; j++) {
-      this.bank.push(new Tile(p5.createVector(0,0), this));
+      this.bank.push(new Tile(p5, p5.createVector(0,0), this));
     }
     emitter.emit('updateBank', this.playerId, this.bank)
   }
 
-  handleKeyPress = (p5: p5Types, key:string, board:Board) => {
+  handleKeyPress = (key:string, board:Board) => {
+    const p5 = this.p5;
     const cursor = this.cursor;
     // move cursor
     if (key === this.controls.up) {
@@ -83,13 +87,13 @@ export default class Player {
     this.cursor = position;
   }
 
-  render(p5: p5Types, tileSize: number, index: number){
-    this.renderCursor(p5, tileSize);
-    if(index === 0) {
-      this.renderBank(p5, p5.createVector(10, 550), tileSize);
-    } else {
-      this.renderBank(p5, p5.createVector(450, 550), tileSize);
-    }
+  render(tileSize: number, index: number){
+    this.renderCursor(tileSize);
+    // if(index === 0) {
+    //   this.renderBank(p5, p5.createVector(10, 550), tileSize);
+    // } else {
+    //   this.renderBank(p5, p5.createVector(450, 550), tileSize);
+    // }
   }
 
   placeTile = (board:Board, tile:Tile | undefined) => {
@@ -98,34 +102,45 @@ export default class Player {
     }
   }
 
-  renderCursor(p5:p5Types, tileSize:number) {
+  renderCursor(tileSize:number) {
+    const p5 = this.p5;
     p5.stroke(this.color);
-    p5.strokeWeight(3);
+    p5.strokeWeight(this.playerId === 0 ? 5:3);
     p5.noFill()
     p5.rect(this.cursor.x * tileSize, this.cursor.y * tileSize, tileSize, tileSize);
   }
 
-  renderBank(p5:p5Types, position: p5Types.Vector, tileSize:number) {
-    p5.push()
-    p5.translate(position.x, position.y);
-    p5.stroke(0)
-    // perimeter
-    p5.rect(0,0, (tileSize * BANK_SIZE) + ((BANK_SIZE + 1) * BANK_MARGIN), tileSize + BANK_MARGIN * 2)
-
-    // tiles
-    for(let i = 0; i < BANK_SIZE; i++) {
-      const tile = this.bank[i];
-      if(tile) {
-        tile.render(
-          p5, 
-          tileSize, 
-          p5.createVector(
-            BANK_MARGIN * (i + 1) + (tileSize * i), 
-            BANK_MARGIN
-          )
-        )
-      }
+  queueTile() {
+    const p5 = this.p5;
+    if(this.bank.length < BANK_SIZE) {
+      this.bank.push(new Tile(p5, p5.createVector(0,0), this));
+      emitter.emit('updateBank', this.playerId, this.bank)
+    } else {
+      this.feed.enqueue(new Tile(p5, p5.createVector(0,0), this));
     }
-    p5.pop()
   }
+
+  // renderBank(p5:p5Types, position: p5Types.Vector, tileSize:number) {
+  //   p5.push()
+  //   p5.translate(position.x, position.y);
+  //   p5.stroke(0)
+  //   // perimeter
+  //   p5.rect(0,0, (tileSize * BANK_SIZE) + ((BANK_SIZE + 1) * BANK_MARGIN), tileSize + BANK_MARGIN * 2)
+
+  //   // tiles
+  //   for(let i = 0; i < BANK_SIZE; i++) {
+  //     const tile = this.bank[i];
+  //     if(tile) {
+  //       tile.render(
+  //         p5, 
+  //         tileSize, 
+  //         p5.createVector(
+  //           BANK_MARGIN * (i + 1) + (tileSize * i), 
+  //           BANK_MARGIN
+  //         )
+  //       )
+  //     }
+  //   }
+  //   p5.pop()
+  // }
 }

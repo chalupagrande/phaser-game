@@ -9,7 +9,6 @@ const SettingsScreen = () => {
   const [settings, setSettings] = React.useState(gameOptions)
 
   const handleChange=(event:React.ChangeEvent<HTMLInputElement>)=> {
-    console.log(event.target.value)
     setSettings({...settings, [event.target.id]: parseInt(event.target.value)})
   }
 
@@ -40,7 +39,6 @@ const SettingsScreen = () => {
         <li className="column">
           <label htmlFor="ballSize">Ball Size (pixels)</label>
           <input id="ballSize" onChange={handleChange} value={settings.ballSize}></input>
-          <p>NOTE: Making this any other value other than = to the tile size will cause an error yet to be resolved <br/> Search: BALL_SIZE_ERROR in the code to find out why</p>
         </li>
       </ul>
       <div className="column">

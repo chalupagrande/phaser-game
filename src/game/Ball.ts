@@ -19,16 +19,16 @@ export default class Ball {
   }
 
   calculateNextPosition(board:Board) {
-    const {width, height} = board
+    const {width, height, tileSize} = board
     let velocity = this.direction.copy().mult(this.speed);
     // calculate next position
     let nextPosition = this.position.copy().add(velocity);
-    if(nextPosition.x > width - this.ballDiameter || nextPosition.x < 0) {
+    if(nextPosition.x > width - tileSize || nextPosition.x < 0) {
       this.direction.x *= -1 
       velocity = this.direction.copy().mult(this.speed)
       nextPosition = this.position.copy().add(velocity)
     }
-    if(nextPosition.y > height - this.ballDiameter || nextPosition.y < 0) {
+    if(nextPosition.y > height - tileSize || nextPosition.y < 0) {
       this.direction.y *= -1
       velocity = this.direction.copy().mult(this.speed)
       nextPosition = this.position.copy().add(velocity)
@@ -42,8 +42,8 @@ export default class Ball {
     // calculate current GRID position
     if(this.direction.x < 0 || this.direction.y < 0) {
       return p5.createVector(
-        Math.floor((position.x + (this.ballDiameter- 0.1)) / tileSize), 
-        Math.floor((position.y + (this.ballDiameter- 0.1)) / tileSize)
+        Math.floor((position.x + (tileSize- 0.1)) / tileSize), 
+        Math.floor((position.y + (tileSize- 0.1)) / tileSize)
       )
     } else {
       return p5.createVector(
@@ -58,7 +58,7 @@ export default class Ball {
     const {tileSize} = board
     // render
     p5.push()
-    p5.translate(this.ballDiameter/2, this.ballDiameter/2)
+    p5.translate(tileSize/2, tileSize/2)
     p5.noStroke()
     p5.fill(0);
     p5.circle(this.position.x, this.position.y, this.ballDiameter);
@@ -79,11 +79,6 @@ export default class Ball {
         }
         tile.action(board, this)
       }
-      // TODO: 
-      // BALL_SIZE_ERROR
-      // This warps the ball to the top left corner of the tile, so when it is traveling
-      // up or left, it will be in the wrong position. 
-      // HOWEVER this is needed to adjust for weird multiples of SPEED and TILE_SIZE
       possibleNextPosition = gridPosition.copy().mult(tileSize)
     }
 

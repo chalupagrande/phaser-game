@@ -50,6 +50,7 @@ export default class Board {
 
   drawBackground(){  
     const p5 = this.p5;
+    p5.push()
     p5.background(255);
     p5.stroke(0);
     p5.strokeWeight(1);
@@ -59,10 +60,12 @@ export default class Board {
         p5.rect(i * this.tileSize, j * this.tileSize, this.tileSize, this.tileSize);
       }
     }
+    p5.pop()
   }
 
   drawTiles() {
     const p5 = this.p5;
+    p5.push()
     p5.stroke(0);
     p5.strokeWeight(1);
     for (let i = 0; i < this.xSize; i++) {
@@ -74,5 +77,6 @@ export default class Board {
         }
       }
     }
+    p5.pop()
   }
 }

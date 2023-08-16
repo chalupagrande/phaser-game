@@ -1,5 +1,5 @@
 import { Queue } from "../utils/Queue";
-import { Tile } from "./Tiles";
+import Tile from "./Tile";
 import p5Types from "p5";
 
 export default class Board {
@@ -10,8 +10,9 @@ export default class Board {
   height: number;
   tileSize: number;
   board: Queue<Tile>[][];
+  goalTiles: Tile[];
 
-  constructor(p5: p5Types, xSize:number, ySize:number, tileSize:number) {
+  constructor(p5: p5Types, xSize:number, ySize:number, tileSize:number, goalTiles: Tile[]) {
     this.p5 = p5;
     this.xSize = xSize;
     this.ySize = ySize;
@@ -19,7 +20,8 @@ export default class Board {
     this.height = ySize * tileSize
     this.tileSize = tileSize;
     this.board = [];
-    this.initBoard();  
+    this.goalTiles = goalTiles;
+    this.initBoard(); 
   }
 
   initBoard = () => {
@@ -29,6 +31,9 @@ export default class Board {
         this.board[i].push(new Queue<Tile>());
       }
     } 
+    this.goalTiles.forEach(tile => {
+      this.addTile(tile.position, tile)
+    })
   }
 
   addTile = (position:p5Types.Vector, tile?:Tile) => {
@@ -40,6 +45,11 @@ export default class Board {
 
   get(position:p5Types.Vector):Queue<Tile> {
     return this.board[position.x][position.y];
+  }
+
+  reset() {
+    this.board = []
+    this.initBoard()
   }
 
 

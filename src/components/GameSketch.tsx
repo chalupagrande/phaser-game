@@ -1,29 +1,29 @@
 import React, {useContext} from 'react';
 import Sketch from "react-p5";
 import p5Types from "p5"; //Import this for typechecking and intellisense
-import Board from './Board';
-import Player from './Player';
-import Ball from './Ball';
+import Board from '../gameObjects/Board';
+import Player from '../gameObjects/Player';
+import Ball from '../gameObjects/Ball';
+import Tile from '../gameObjects/Tile';
 import { 
   GameContext, 
-  GameOptions, 
+  GameSettings, 
   initialGameState, 
   GameState
- } from '../components/GameContext';
+ } from './GameContext';
 import { random } from '../utils';
-import { Tile } from './Tiles';
 
 
 // initialize internal game state
 let gameState:GameState = initialGameState
 
-const Game = () => {
+const GameSketch = () => {
   let paused = false;
-  const {gameOptions: options, updateGameState} = useContext(GameContext)
+  const {gameSettings: settings, updateGameState} = useContext(GameContext)
   // wrapper function that will update BOTH GameContext and internal game state
   // use this to keep internal game staten in sync with GameContext
-  const updateGame = (update: (gameState:GameState, options?: GameOptions) => GameState) => {
-    const newGameState = update(gameState, options)
+  const updateGame = (update: (gameState:GameState, settings?: GameSettings) => GameState) => {
+    const newGameState = update(gameState, settings)
     gameState = {...gameState, ...newGameState}
     updateGameState(gameState)
   }
@@ -31,8 +31,8 @@ const Game = () => {
   const setup = (p5:p5Types, canvasParentRef:Element) => {
     // create canvas
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
-    const middleX = Math.floor(options.boardTileWidth/2)
-    const middleY = Math.floor(options.boardTileHeight/2)
+    const middleX = Math.floor(settings.boardTileWidth/2)
+    const middleY = Math.floor(settings.boardTileHeight/2)
     const randomBallDirection = random(2) === 0 ? p5.createVector(0,-1) : p5.createVector(0,1)
     // initialize players
     const player1 = new Player(
@@ -54,7 +54,7 @@ const Game = () => {
       p5,
       updateGame,
       1,
-      p5.createVector(options.boardTileWidth - 1,middleY),
+      p5.createVector(settings.boardTileWidth - 1,middleY),
       [0,255,0],
       {
         up: "w",
@@ -66,18 +66,24 @@ const Game = () => {
         placeTile3: "3",
       })
     const players = [player1, player2]
-    const board = new Board(p5, options.boardTileWidth, options.boardTileHeight, options.tileSize)
-    players.map(player => {
-      const goalTileXPos = player.playerId === 0 ? 0 : options.boardTileWidth - 1
-      return player.placeTile(new Tile(p5, p5.createVector(goalTileXPos, middleY), player, "goal"), board)
+    const goalTiles = players.map(player => {
+      const goalTileXPos = player.playerId === 0 ? 0 : settings.boardTileWidth - 1
+      return new Tile(p5, p5.createVector(goalTileXPos, middleY), player, "goal")
     })
+
+    const board = new Board(
+      p5,
+      settings.boardTileWidth,
+      settings.boardTileHeight,
+      settings.tileSize,
+      goalTiles)
+    
     const ball = new Ball(
       p5, 
-      options.ballSize, 
-      p5.createVector(middleX * options.tileSize, middleY*options.tileSize), 
+      settings.ballSize, 
+      p5.createVector(middleX * settings.tileSize, middleY*settings.tileSize), 
       randomBallDirection, 
-      options.initialBallSpeed * 1
-      )
+      settings.initialBallSpeed * 1)
     // set the initial internal game state
     gameState = {...gameState, players, board, ball}
   };
@@ -88,7 +94,7 @@ const Game = () => {
     if(board && ball && Array.isArray(players) && players.length > 0) {
       p5.background(0);
       board.render()
-      players.forEach((player) => player.update(gameState, options))
+      players.forEach((player) => player.update(gameState, settings))
       ball.render(board)
     }
   };
@@ -116,4 +122,4 @@ const Game = () => {
   return (<Sketch setup={setup} draw={draw} windowResized={windowResized} keyPressed={keyPressed}/>); 
 }
 
-export default React.memo(Game, () => false)
+export default React.memo(GameSketch, () => false)

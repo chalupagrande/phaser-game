@@ -1,8 +1,9 @@
 import { Queue } from "../utils/Queue"
 import Board from "./Board";
-import { GameOptions, GameState } from "../components/GameContext";
-import {Tile} from "./Tiles"
+import { GameSettings, GameState } from "../components/GameContext";
+import Tile from "./Tile"
 import p5Types from "p5";
+import GameObject from './GameObject'
 
 const BANK_SIZE = 3;
 
@@ -16,9 +17,8 @@ type Controls = {
   placeTile3: string,
 }
 
-export default class Player {
-  p5: p5Types;
-  updateGameState: (update: (gameState:GameState, options?: GameOptions) => GameState) => void
+export default class Player extends GameObject {
+  updateGameState: (update: (gameState:GameState, options?: GameSettings) => GameState) => void
   playerId: number;
   feed: Queue<Tile>;
   cursor: p5Types.Vector;
@@ -26,16 +26,17 @@ export default class Player {
   controls: Controls;
   bank: (Tile | undefined)[];
   score: number;
+  initialCursorPosition: p5Types.Vector;
 
   constructor(
       p5: p5Types,
-      updateGameStateFn: (update: (gameState:GameState, options?: GameOptions) => GameState) => void,
+      updateGameStateFn: (update: (gameState:GameState, options?: GameSettings) => GameState) => void,
       id: number,
       startPosition: p5Types.Vector,
       color: [number, number, number],
       controls: Controls
     ){
-    this.p5 = p5;
+    super(p5)
     this.updateGameState = updateGameStateFn
     this.playerId = id
     this.feed = new Queue<Tile>();
@@ -45,6 +46,7 @@ export default class Player {
     this.controls = controls;
     this.score = 0;
     this.initQueueAndBank(10)
+    this.initialCursorPosition = startPosition.copy()
   }
 
   // use this to update the GAME HUD whenever something on the player 
@@ -132,12 +134,19 @@ export default class Player {
     this.updatePlayerState()
   }
 
+  reset() {
+    this.feed = new Queue<Tile>();
+    this.bank = []
+    this.cursor = this.initialCursorPosition
+    this.initQueueAndBank(10)
+  }
+
   //   ___  ___    ___      _____ _  _  ___ 
   //  |   \| _ \  /_\ \    / /_ _| \| |/ __|
   //  | |) |   / / _ \ \/\/ / | || .` | (_ |
   //  |___/|_|_\/_/ \_\_/\_/ |___|_|\_|\___|
 
-  update(gameState: GameState, options: GameOptions) {
+  update(gameState: GameState, options: GameSettings) {
     const {tileSize} = options;
     this.render(tileSize)
   }

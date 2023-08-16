@@ -1,7 +1,7 @@
 import p5Types from "p5";
-import Board from "../Board";
-import Ball from "../Ball";
-import { Tile } from ".";
+import Board from "./Board";
+import Ball from "./Ball";
+import Tile from "./Tile";
 
 // TODO: figure out how to make this the type of TileTypes object
 // to ensure type safety
@@ -45,7 +45,7 @@ export const TileTypes = {
     color: [0,255,255],
     isPermanent: false,
     action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
-      ball.speed = ball.speed +1
+      ball.speed = ball.speed * 1.2
     }
   }, 
   // "slow": {
@@ -60,6 +60,9 @@ export const TileTypes = {
     isPermanent: true,
     action: (p5:p5Types, board:Board, ball:Ball, tile:Tile) => {
       tile?.owner?.incrementScore()
+      ball.reset()
+      board.reset()
+      return true
     }
   }, 
   // "wall": {

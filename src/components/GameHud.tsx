@@ -2,7 +2,7 @@ import React from 'react'
 import { Scoreboard } from './Scoreboard'
 import { Banks } from './Banks'
 import { GameContext } from './GameContext'
-import Player from '../game/Player'
+import Player from '../gameObjects/Player'
 
 
 

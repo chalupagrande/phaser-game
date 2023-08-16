@@ -1,15 +1,18 @@
 import React from 'react'
-import Ball from '../game/Ball'
-import Board from '../game/Board'
-import Player from '../game/Player'
+import Ball from '../gameObjects/Ball'
+import Board from '../gameObjects/Board'
+import Player from '../gameObjects/Player'
 
-export const initialGameOptions = {
+export const initialGameSettings = {
   tileSize: 80,
   boardTileWidth: 5,
   boardTileHeight: 5,
   initialBallSpeed: 1,
   ballSize: 20,
 }
+export type GameSettings = typeof initialGameSettings
+
+
 export const initialGameState ={
   players: [],
   board: undefined,
@@ -18,13 +21,13 @@ export const initialGameState ={
 
 export const initialGameContext = {
   gameState: initialGameState,
-  gameOptions: initialGameOptions,
+  gameSettings: initialGameSettings,
   updateGameState: (newGameState: any) => {},
-  updateGameOptions: (newGameOptions: any) => {},
+  updateGameSettings: (newGameSettings: any) => {},
 }
 
 
-export type GameOptions = typeof initialGameOptions
+export type gameSettings = typeof initialGameSettings
 export type GameState = {
   players?: Player[],
   board?: Board,
@@ -35,18 +38,18 @@ export const GameContext = React.createContext(initialGameContext)
 
 export const GameContextProvider = ({children}: {children: React.ReactNode}) => {
   const [gameState, setGameState] = React.useState(initialGameState)
-  const [gameOptions, setGameOptions] = React.useState(initialGameOptions)
+  const [gameSettings, setGameSettings] = React.useState(initialGameSettings)
 
   const updateGameState = (newGameState: any) => {
     setGameState({...gameState, ...newGameState})
   }
 
-  const updateGameOptions = (newGameOptions: any) => {
-    setGameOptions({...gameOptions, ...newGameOptions})
+  const updateGameSettings = (newGameSettings: any) => {
+    setGameSettings({...gameSettings, ...newGameSettings})
   }
 
   return (
-    <GameContext.Provider value={{gameState, gameOptions, updateGameState, updateGameOptions}}>
+    <GameContext.Provider value={{gameState, gameSettings, updateGameState, updateGameSettings}}>
       {children}
     </GameContext.Provider>
   )

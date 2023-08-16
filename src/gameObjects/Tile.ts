@@ -1,12 +1,12 @@
-import { pickRandom } from "../../utils";
+import { pickRandom } from "../utils";
 import p5Types from 'p5'
-import Board from "../Board";
-import Ball from "../Ball";
-import Player from "../Player";
+import Board from "./Board";
+import Ball from "./Ball";
+import Player from "./Player";
 import { PlayableTileTypeKeys, TileType, TileTypes } from "./TileTypes";
 
 
-export class Tile {
+class Tile {
   p5: p5Types;
   position: p5Types.Vector;
   type: TileType;
@@ -39,3 +39,5 @@ export class Tile {
     action(p5, board, ball, this)
   }
 }
+
+export default Tile

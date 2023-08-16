@@ -1,5 +1,6 @@
 import p5Types from 'p5'
 import Board from './Board';
+import { random } from '../utils';
 
 export default class Ball {
   p5: p5Types;
@@ -8,14 +9,18 @@ export default class Ball {
   speed: number;
   ballGridPosition: p5Types.Vector;
   ballDiameter: number;
+  initialPosition: p5Types.Vector;
+  initialSpeed: number;
 
-  constructor(p5: p5Types, diameter: number, initialGridPosition: p5Types.Vector, initialVelocity: p5Types.Vector, speed:number = 1){
+  constructor(p5: p5Types, diameter: number, initialPosition: p5Types.Vector, initialDirection: p5Types.Vector, speed:number = 1){
     this.p5 = p5;
-    this.position = initialGridPosition;
-    this.direction = initialVelocity;
+    this.position = initialPosition;
+    this.direction = initialDirection;
     this.speed = speed;
-    this.ballGridPosition = initialGridPosition;
+    this.ballGridPosition = initialPosition;
     this.ballDiameter = diameter;
+    this.initialPosition = initialPosition
+    this.initialSpeed = speed
   }
 
   calculateNextPosition(board:Board) {
@@ -53,6 +58,13 @@ export default class Ball {
     }
   }
 
+  reset() {
+    this.position = this.initialPosition.copy()
+    const dir = random(2) === 0 ? -1 : 1
+    this.direction = this.p5.createVector(0,dir)
+    this.speed = this.initialSpeed
+  }
+
   render(board:Board){
     const p5 = this.p5;
     const {tileSize} = board
@@ -66,7 +78,7 @@ export default class Ball {
 
     let nextPosition = this.calculateNextPosition(board)
     let gridPosition = this.calculateGridPosition(nextPosition, board)
-
+    
     // calculate nextGridPosition
     let possibleNextPosition;
     if(!gridPosition.equals(this.ballGridPosition)) {

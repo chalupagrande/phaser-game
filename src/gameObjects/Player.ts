@@ -18,7 +18,6 @@ type Controls = {
 }
 
 export default class Player extends GameObject {
-  updateGameState: (update: (gameState:GameState, options?: GameSettings) => GameState) => void
   playerId: number;
   feed: Queue<Tile>;
   cursor: p5Types.Vector;
@@ -27,6 +26,7 @@ export default class Player extends GameObject {
   bank: (Tile | undefined)[];
   score: number;
   initialCursorPosition: p5Types.Vector;
+  updateGameState: (update: (gameState:GameState, options?: GameSettings) => GameState) => void
 
   constructor(
       p5: p5Types,

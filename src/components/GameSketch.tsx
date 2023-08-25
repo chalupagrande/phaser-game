@@ -67,7 +67,7 @@ const GameSketch = () => {
       })
     const players = [player1, player2]
     const goalTiles = players.map(player => {
-      const goalTileXPos = player.playerId === 0 ? 0 : settings.boardTileWidth - 1
+      const goalTileXPos = player.playerId === 1 ? 0 : settings.boardTileWidth - 1
       return new Tile(p5, p5.createVector(goalTileXPos, middleY), player, "goal")
     })
 

@@ -5,15 +5,15 @@ import { GameContext } from '../components/GameContext'
 
 
 const SettingsScreen = () => {
-  const {updateGameOptions, gameOptions} = React.useContext(GameContext)
-  const [settings, setSettings] = React.useState(gameOptions)
+  const {updateGameSettings, gameSettings} = React.useContext(GameContext)
+  const [settings, setSettings] = React.useState(gameSettings)
 
   const handleChange=(event:React.ChangeEvent<HTMLInputElement>)=> {
     setSettings({...settings, [event.target.id]: parseInt(event.target.value)})
   }
 
   const onSave = () => {
-    updateGameOptions(settings)
+    updateGameSettings(settings)
   }
 
   return (

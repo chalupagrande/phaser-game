@@ -15,3 +15,7 @@ https://github.com/photonstorm/phaser3-examples/tree/8f5cc1c8e376216f184abf1f2ab
 ## What you were doing 8/14/23
 - Trying to reset the entire board, ball and player banks when a point is scored
   - i think this requires passing the game state to all the components, so they can read all the properties from one another. 
+
+## UPDATE 8/24/23
+- Rather than the player initializing their own queue, have the Game initials the players queue and bank for them, so that it can pass a copy of the game state to the tiles action. This way the tile's action function will have a copy of the entire game state to do what it needs. 
+

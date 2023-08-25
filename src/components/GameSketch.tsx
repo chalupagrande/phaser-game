@@ -42,21 +42,6 @@ const GameSketch = () => {
       p5.createVector(0,middleY),
       [255,0,0], 
       {
-        up: "ArrowUp",
-        down: "ArrowDown",
-        left: "ArrowLeft",
-        right: "ArrowRight",
-        placeTile1: "8",
-        placeTile2: "9",
-        placeTile3: "0",
-      })
-    const player2 = new Player(
-      p5,
-      updateGame,
-      1,
-      p5.createVector(settings.boardTileWidth - 1,middleY),
-      [0,255,0],
-      {
         up: "w",
         down: "s",
         left: "a",
@@ -64,7 +49,24 @@ const GameSketch = () => {
         placeTile1: "1",
         placeTile2: "2",
         placeTile3: "3",
-      })
+      }
+      )
+    const player2 = new Player(
+      p5,
+      updateGame,
+      1,
+      p5.createVector(settings.boardTileWidth - 1,middleY), // start position
+      [0,255,0], // color
+      {
+        up: "ArrowUp",
+        down: "ArrowDown",
+        left: "ArrowLeft",
+        right: "ArrowRight",
+        placeTile1: "8",
+        placeTile2: "9",
+        placeTile3: "0",
+      }
+      )
     const players = [player1, player2]
     const goalTiles = players.map(player => {
       const goalTileXPos = player.playerId === 1 ? 0 : settings.boardTileWidth - 1

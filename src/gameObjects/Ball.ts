@@ -58,8 +58,9 @@ export default class Ball {
     }
   }
 
-  reset() {
+  reset(board:Board) {
     this.position = this.initialPosition.copy()
+    this.ballGridPosition = this.calculateGridPosition(this.position, board)
     const dir = random(2) === 0 ? -1 : 1
     this.direction = this.p5.createVector(0,dir)
     this.speed = this.initialSpeed
@@ -81,6 +82,7 @@ export default class Ball {
     
     // calculate nextGridPosition
     let possibleNextPosition;
+    let isNewGame = false
     if(!gridPosition.equals(this.ballGridPosition)) {
       const tileQueue = board.get(gridPosition);
       const tile = tileQueue.peek();
@@ -89,19 +91,23 @@ export default class Ball {
           tileQueue.dequeue();
           tile.owner?.givePlayerNewTile()
         }
-        tile.action(board, this)
+        isNewGame = !!tile.action(board, this)
       }
       possibleNextPosition = gridPosition.copy().mult(tileSize)
     }
 
-    let newNextPosition = possibleNextPosition || nextPosition
-    this.position = newNextPosition
-    this.ballGridPosition = gridPosition
+    
+    if(!isNewGame) {
+      let newNextPosition = possibleNextPosition || nextPosition
+      this.position = newNextPosition
+      this.ballGridPosition = gridPosition
+    }
+    
   
     // draw ball grid position
-    p5.stroke(0)
-    p5.strokeWeight(3)
-    p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
+    // p5.stroke(0)
+    // p5.strokeWeight(3)
+    // p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
   }
   
 }

@@ -36,7 +36,7 @@ class Tile {
   action(board:Board, ball:Ball) {
     const p5 = this.p5;
     const action = TileTypes[this.type].action
-    action(p5, board, ball, this)
+    return action(p5, board, ball, this)
   }
 }
 

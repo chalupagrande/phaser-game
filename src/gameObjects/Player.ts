@@ -135,6 +135,7 @@ export default class Player extends GameObject {
   }
 
   reset() {
+    debugger
     this.feed = new Queue<Tile>();
     this.bank = []
     this.cursor = this.initialCursorPosition

@@ -69,6 +69,7 @@ export const TileTypes = {
     isPermanent: true,
     action: (p5:p5Types, tile:Tile, game:typeof Game):boolean => {
       const {ball, board, players} = game.getGameState()
+      tile.owner.incrementScore()
       players.forEach(player => player.reset())
       ball.reset()
       board.reset()

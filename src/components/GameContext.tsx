@@ -5,7 +5,7 @@ import Player from '../gameObjects/Player'
 
 export const initialGameSettings = {
   tileSize: 80,
-  boardTileWidth: 5,
+  boardTileWidth: 11,
   boardTileHeight: 5,
   initialBallSpeed: 1,
   ballSize: 20,

@@ -127,7 +127,6 @@ export default class Player extends GameObject {
 
   incrementScore() {
     this.score = this.score + 1
-    Game.updateHUD()
   }
 
   reset() {

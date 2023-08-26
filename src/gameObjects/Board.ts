@@ -1,9 +1,9 @@
 import { Queue } from "../utils/Queue";
+import GameObject from "./GameObject";
 import Tile from "./Tile";
 import p5Types from "p5";
 
-export default class Board {
-  p5: p5Types;
+export default class Board extends GameObject{
   xSize: number;
   ySize: number;
   width: number;
@@ -13,7 +13,7 @@ export default class Board {
   goalTiles: Tile[];
 
   constructor(p5: p5Types, xSize:number, ySize:number, tileSize:number, goalTiles: Tile[]) {
-    this.p5 = p5;
+    super(p5)
     this.xSize = xSize;
     this.ySize = ySize;
     this.width = xSize * tileSize
@@ -53,7 +53,7 @@ export default class Board {
   }
 
 
-  render(){
+  draw(){
     this.drawBackground();
     this.drawTiles();
   }
@@ -83,7 +83,7 @@ export default class Board {
         const tileQueue = this.get(p5.createVector(i, j))
         const topTile = tileQueue.peek();
         if(topTile) {
-          topTile.render(this.tileSize)
+          topTile.render()
         }
       }
     }

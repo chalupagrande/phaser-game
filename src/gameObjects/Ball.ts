@@ -1,9 +1,9 @@
 import p5Types from 'p5'
-import Board from './Board';
 import { random } from '../utils';
+import Game from './Game';
+import GameObject from './GameObject';
 
-export default class Ball {
-  p5: p5Types;
+export default class Ball extends GameObject{
   position: p5Types.Vector;
   direction: p5Types.Vector;
   speed: number;
@@ -13,7 +13,7 @@ export default class Ball {
   initialSpeed: number;
 
   constructor(p5: p5Types, diameter: number, initialPosition: p5Types.Vector, initialDirection: p5Types.Vector, speed:number = 1){
-    this.p5 = p5;
+    super(p5)
     this.position = initialPosition;
     this.direction = initialDirection;
     this.speed = speed;
@@ -23,7 +23,8 @@ export default class Ball {
     this.initialSpeed = speed
   }
 
-  calculateNextPosition(board:Board) {
+  calculateNextPosition() {
+    const {board} = Game.getGameState()
     const {width, height, tileSize} = board
     let velocity = this.direction.copy().mult(this.speed);
     // calculate next position
@@ -41,9 +42,9 @@ export default class Ball {
     return nextPosition
   }
 
-  calculateGridPosition(position: p5Types.Vector, board:Board) {
+  calculateGridPosition(position: p5Types.Vector) {
     const p5 = this.p5
-    const {tileSize} = board
+    const {tileSize} = Game.getGameSettings()
     // calculate current GRID position
     if(this.direction.x < 0 || this.direction.y < 0) {
       return p5.createVector(
@@ -58,17 +59,18 @@ export default class Ball {
     }
   }
 
-  reset(board:Board) {
+  reset() {
     this.position = this.initialPosition.copy()
-    this.ballGridPosition = this.calculateGridPosition(this.position, board)
+    this.ballGridPosition = this.calculateGridPosition(this.position)
     const dir = random(2) === 0 ? -1 : 1
     this.direction = this.p5.createVector(0,dir)
     this.speed = this.initialSpeed
   }
 
-  render(board:Board){
+  draw(){
+    const {board} = Game.getGameState()
     const p5 = this.p5;
-    const {tileSize} = board
+    const {tileSize} = Game.getGameSettings()
     // render
     p5.push()
     p5.translate(tileSize/2, tileSize/2)
@@ -77,12 +79,12 @@ export default class Ball {
     p5.circle(this.position.x, this.position.y, this.ballDiameter);
     p5.pop()
 
-    let nextPosition = this.calculateNextPosition(board)
-    let gridPosition = this.calculateGridPosition(nextPosition, board)
+    let nextPosition = this.calculateNextPosition()
+    let gridPosition = this.calculateGridPosition(nextPosition)
     
     // calculate nextGridPosition
     let possibleNextPosition;
-    let isNewGame = false
+    let actionChangedPositionOfTheBall = false
     if(!gridPosition.equals(this.ballGridPosition)) {
       const tileQueue = board.get(gridPosition);
       const tile = tileQueue.peek();
@@ -91,13 +93,13 @@ export default class Ball {
           tileQueue.dequeue();
           tile.owner?.givePlayerNewTile()
         }
-        isNewGame = !!tile.action(board, this)
+        actionChangedPositionOfTheBall = !!tile.action()
       }
       possibleNextPosition = gridPosition.copy().mult(tileSize)
     }
 
-    
-    if(!isNewGame) {
+    // if it has not changed position, move to next position
+    if(!actionChangedPositionOfTheBall) {
       let newNextPosition = possibleNextPosition || nextPosition
       this.position = newNextPosition
       this.ballGridPosition = gridPosition
@@ -105,9 +107,9 @@ export default class Ball {
     
   
     // draw ball grid position
-    // p5.stroke(0)
-    // p5.strokeWeight(3)
-    // p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
+    p5.stroke(0)
+    p5.strokeWeight(3)
+    p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
   }
   
 }

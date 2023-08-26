@@ -39,7 +39,7 @@ export const GameContext = React.createContext(initialGameContext)
 export const GameContextProvider = ({children}: {children: React.ReactNode}) => {
   const [gameState, setGameState] = React.useState(initialGameState)
   const [gameSettings, setGameSettings] = React.useState(initialGameSettings)
- 
+
   const updateGameState = (newGameState: any) => {
     setGameState({...gameState, ...newGameState})
   }

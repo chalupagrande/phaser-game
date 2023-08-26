@@ -7,29 +7,18 @@ import Ball from '../gameObjects/Ball';
 import Tile from '../gameObjects/Tile';
 import { 
   GameContext, 
-  GameSettings, 
-  initialGameState, 
-  GameState
  } from './GameContext';
 import { random } from '../utils';
+import Game from '../gameObjects/Game'
 
 
-// initialize internal game state
-let gameState:GameState = initialGameState
-
-const GameSketch = () => {
+const GameSketch = () => {  
   let paused = false;
   const {gameSettings: settings, updateGameState} = useContext(GameContext)
-  // wrapper function that will update BOTH GameContext and internal game state
-  // use this to keep internal game staten in sync with GameContext
-  const updateGame = (update: (gameState:GameState, settings?: GameSettings) => GameState) => {
-    const newGameState = update(gameState, settings)
-    gameState = {...gameState, ...newGameState}
-    updateGameState(gameState)
-  }
-
+  
   const setup = (p5:p5Types, canvasParentRef:Element) => {
     // create canvas
+    Game.init(settings, updateGameState)
     p5.createCanvas(p5.windowWidth, p5.windowHeight).parent(canvasParentRef);
     const middleX = Math.floor(settings.boardTileWidth/2)
     const middleY = Math.floor(settings.boardTileHeight/2)
@@ -37,7 +26,6 @@ const GameSketch = () => {
     // initialize players
     const player1 = new Player(
       p5,
-      updateGame,
       0,
       p5.createVector(0,middleY),
       [255,0,0], 
@@ -53,7 +41,6 @@ const GameSketch = () => {
       )
     const player2 = new Player(
       p5,
-      updateGame,
       1,
       p5.createVector(settings.boardTileWidth - 1,middleY), // start position
       [0,255,0], // color
@@ -87,17 +74,21 @@ const GameSketch = () => {
       randomBallDirection, 
       settings.initialBallSpeed * 1)
     // set the initial internal game state
-    gameState = {...gameState, players, board, ball}
+    Game.setPlayers(players)
+    Game.setBall(ball)
+    Game.setBoard(board)
+    Game.updateHUD()
   };
 
   const draw = (p5:p5Types) => {
     if(paused) return;
-    const {players, board, ball} = gameState
+    const gameState = Game.getGameState()
+    const {board, ball, players} = gameState
     if(board && ball && Array.isArray(players) && players.length > 0) {
       p5.background(0);
-      board.render()
-      players.forEach((player) => player.update(gameState, settings))
-      ball.render(board)
+      board.draw()
+      players.forEach((player) => player.draw())
+      ball.draw()
     }
   };
 
@@ -114,9 +105,9 @@ const GameSketch = () => {
       paused = !paused;
     } 
 
-    const {players, board} = gameState
+    const {players, board} = Game.getGameState()
     if(Array.isArray(players) && players.length > 0 && board) {
-      players.forEach(player => player.handleKeyPress(key, board))
+      players.forEach(player => player.handleKeyPress(key))
     }
     return false
   }

@@ -1,6 +1,4 @@
 import { Queue } from "../utils/Queue"
-import Board from "./Board";
-import { GameSettings, GameState } from "../components/GameContext";
 import Tile from "./Tile"
 import p5Types from "p5";
 import GameObject from './GameObject'
@@ -28,19 +26,16 @@ export default class Player extends GameObject {
   bank: (Tile | undefined)[];
   score: number;
   initialCursorPosition: p5Types.Vector;
-  updateGameState: (update: (gameState:GameState, options?: GameSettings) => GameState) => void
   sound: Howl;
 
   constructor(
       p5: p5Types,
-      updateGameStateFn: (update: (gameState:GameState, options?: GameSettings) => GameState) => void,
       id: number,
       startPosition: p5Types.Vector,
       color: [number, number, number],
       controls: Controls
     ){
     super(p5)
-    this.updateGameState = updateGameStateFn
     this.playerId = id
     this.feed = new Queue<Tile>();
     this.bank = []
@@ -62,19 +57,6 @@ export default class Player extends GameObject {
     this.sound.play('load');
   }
 
-  // use this to update the GAME HUD whenever something on the player 
-  // changes, and needs to be reflected in the hud.
-  updatePlayerState = () => {
-    this.updateGameState((gameState:GameState)=> {
-      if(gameState.players) {
-        const playersCopy = [...gameState.players];
-        playersCopy[this.playerId] = this;
-        return { players: playersCopy }        
-      }
-      return gameState
-    })
-  }
-
   initQueueAndBank = (numTiles:number) => {
     const p5 = this.p5;
     for(let i = 0; i < numTiles; i++) {
@@ -84,37 +66,36 @@ export default class Player extends GameObject {
     for(let j = 0; j < BANK_SIZE; j++) {
       this.bank.push(new Tile(p5, p5.createVector(0,0), this));
     }
-    this.updatePlayerState();
-    const {players} = Game.getGameState()
-    Game.setPlayers([...players, this])
   }
 
-  handleKeyPress = (key:string, board:Board) => {
+  handleKeyPress = (key:string) => {
+
     this.handleCursorKeyPress(key)
-    this.handleTileKeyPress(key, board);
+    this.handleTileKeyPress(key);
   }
 
 
-  handleTileKeyPress(key: string, board:Board){
+  handleTileKeyPress(key: string){
     if(key === this.controls.placeTile1) {
-      this.placeTile(0, board);
+      this.placeTile(0);
     } else if(key === this.controls.placeTile2) {
-      this.placeTile(1, board);
+      this.placeTile(1);
     } else if(key === this.controls.placeTile3) {
-      this.placeTile(2, board);
+      this.placeTile(2);
     }
   }
 
-  placeTile(tile: number | Tile, board:Board) {
+  placeTile(tile: number | Tile) {
+    const {board} = Game.getGameState()
     if(typeof tile === 'number') {
       const tileBankIndex = tile
       const tyle = this.bank[tile]
       this.bank[tileBankIndex] = this.feed.dequeue();
       board.addTile(this.cursor, tyle);
-      this.updatePlayerState()
+      Game.updateHUD()
     } else {
       board.addTile(tile.position, tile);
-      this.updatePlayerState()
+      Game.updateHUD()
     }
   }
 
@@ -141,12 +122,12 @@ export default class Player extends GameObject {
     } else {
       this.feed.enqueue(new Tile(p5, p5.createVector(0,0), this));
     }
-    this.updatePlayerState()
+    Game.updateHUD()
   }
 
   incrementScore() {
     this.score = this.score + 1
-    this.updatePlayerState()
+    Game.updateHUD()
   }
 
   reset() {
@@ -154,21 +135,15 @@ export default class Player extends GameObject {
     this.bank = []
     this.cursor = this.initialCursorPosition
     this.initQueueAndBank(10)
-    this.updatePlayerState()
-    console.log(Game)
+    Game.updateHUD()
   }
 
   //   ___  ___    ___      _____ _  _  ___ 
   //  |   \| _ \  /_\ \    / /_ _| \| |/ __|
   //  | |) |   / / _ \ \/\/ / | || .` | (_ |
   //  |___/|_|_\/_/ \_\_/\_/ |___|_|\_|\___|
-
-  update(gameState: GameState, options: GameSettings) {
-    const {tileSize} = options;
-    this.render(tileSize)
-  }
-                                        
-  renderCursor(tileSize:number) {
+                               
+  drawCursor(tileSize:number) {
     const p5 = this.p5;
     p5.stroke(this.color);
     p5.strokeWeight(this.playerId === 0 ? 5:3);
@@ -176,7 +151,8 @@ export default class Player extends GameObject {
     p5.rect(this.cursor.x * tileSize, this.cursor.y * tileSize, tileSize, tileSize);
   }
 
-  render(tileSize: number){
-    this.renderCursor(tileSize);
+  draw(){
+    const {tileSize} = Game.getGameSettings()
+    this.drawCursor(tileSize);
   }
 }

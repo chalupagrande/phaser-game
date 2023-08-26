@@ -19,7 +19,7 @@ class Game {
   ball?: Ball;
   board?: Board; 
 
-  constructor(p5: p5Types) {
+  constructor() {
     this.playState = GamePlayStates.PLAYING
     this.settings = initialGameSettings
     this.players = []
@@ -57,4 +57,4 @@ class Game {
   }
 }
 
-export default Game
+export default new Game()

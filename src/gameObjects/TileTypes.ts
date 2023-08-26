@@ -60,9 +60,9 @@ export const TileTypes = {
     isPermanent: true,
     action: (p5:p5Types, board:Board, ball:Ball, tile:Tile):boolean => {
       tile?.owner?.incrementScore()
+      tile?.owner?.reset()
       ball.reset(board)
       board.reset()
-      board.
       return true
     }
   }, 

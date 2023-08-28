@@ -61,13 +61,17 @@ export default class Board extends GameObject{
   drawBackground(){  
     const p5 = this.p5;
     p5.push()
-    p5.background(255);
     p5.stroke(0);
     p5.strokeWeight(1);
     for (let i = 0; i < this.xSize; i++) {
       for(let j = 0; j < this.ySize; j++) {
-        p5.fill(255);
+        p5.push()
+        p5.noFill();
+        p5.drawingContext.shadowBlur = 20;
+        p5.drawingContext.shadowColor = `rgb(145,26,238)`;
+        p5.stroke(145,26,238)
         p5.rect(i * this.tileSize, j * this.tileSize, this.tileSize, this.tileSize);
+        p5.pop()
       }
     }
     p5.pop()
@@ -83,7 +87,7 @@ export default class Board extends GameObject{
         const tileQueue = this.get(p5.createVector(i, j))
         const topTile = tileQueue.peek();
         if(topTile) {
-          topTile.render()
+          topTile.draw()
         }
       }
     }

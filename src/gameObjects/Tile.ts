@@ -3,7 +3,6 @@ import p5Types from 'p5'
 import Player from "./Player";
 import { PlayableTileTypeKeys, TileType, TileTypes } from "./TileTypes";
 import GameObject from "./GameObject";
-import Game from "./Game";
 
 
 class Tile extends GameObject{
@@ -20,17 +19,12 @@ class Tile extends GameObject{
     this.isPermanent = TileTypes[this.type]?.isPermanent || false;
   }
 
-  render(position?:p5Types.Vector){
-    const {tileSize} = Game.getGameSettings()
-    const p5 = this.p5;
-    const color = !this.isPermanent && this.owner ? this.owner.color: TileTypes[this.type].color
+  draw(position?:p5Types.Vector){
     // render with player color
-    p5.fill(color[0], color[1], color[2]);
     if(position) {
-      p5.rect(position.x, position.y, tileSize, tileSize);
-    } else {
-      p5.rect(this.position.x * tileSize, this.position.y * tileSize, tileSize, tileSize);
+      this.position = position
     }
+    TileTypes[this.type].draw(this.p5, this)
   }
 
   /**
@@ -40,7 +34,7 @@ class Tile extends GameObject{
   action():boolean {
     const p5 = this.p5;
     const action = TileTypes[this.type].action
-    return action(p5, this, Game)
+    return action(p5, this)
   }
 }
 

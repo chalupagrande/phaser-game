@@ -1,5 +1,4 @@
 import p5Types from 'p5'
-import { GameState } from '../components/GameContext'
 
 class GameObject {
   p5: p5Types;
@@ -7,7 +6,7 @@ class GameObject {
     this.p5 = p5
   }
 
-  draw(gameState: GameState) {
+  draw() {
     const p5 = this.p5
     p5.push()
     p5.fill(255, 0, 0)

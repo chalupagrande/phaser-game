@@ -11,6 +11,8 @@ export default class Ball extends GameObject{
   ballDiameter: number;
   initialPosition: p5Types.Vector;
   initialSpeed: number;
+  color: p5Types.Color;
+  prevPosition: p5Types.Vector;
 
   constructor(p5: p5Types, diameter: number, initialPosition: p5Types.Vector, initialDirection: p5Types.Vector, speed:number = 1){
     super(p5)
@@ -21,6 +23,8 @@ export default class Ball extends GameObject{
     this.ballDiameter = diameter;
     this.initialPosition = initialPosition
     this.initialSpeed = speed
+    this.color = p5.color(229,107,3)
+    this.prevPosition = initialPosition.copy()
   }
 
   calculateNextPosition() {
@@ -71,11 +75,16 @@ export default class Ball extends GameObject{
     const {board} = Game.getGameState()
     const p5 = this.p5;
     const {tileSize} = Game.getGameSettings()
+    const color = this.color.levels
     // render
-    p5.push()
     p5.translate(tileSize/2, tileSize/2)
     p5.noStroke()
-    p5.fill(0);
+    p5.fill(this.color);
+    p5.push()
+    p5.drawingContext.shadowOffsetX = 0;
+    p5.drawingContext.shadowOffsetY = 0;
+    p5.drawingContext.shadowBlur = 20;
+    p5.drawingContext.shadowColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
     p5.circle(this.position.x, this.position.y, this.ballDiameter);
     p5.pop()
 
@@ -107,9 +116,12 @@ export default class Ball extends GameObject{
     
   
     // draw ball grid position
-    p5.stroke(0)
-    p5.strokeWeight(3)
-    p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
+    // p5.stroke(0)
+    // p5.strokeWeight(3)
+    // p5.rect(this.ballGridPosition.x * tileSize, this.ballGridPosition.y * tileSize, tileSize, tileSize)
+
+    // draw ball next position
+
   }
   
 }

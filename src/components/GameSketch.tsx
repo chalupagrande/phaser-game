@@ -30,15 +30,16 @@ const GameSketch = () => {
       p5.createVector(0,middleY),
       [255,0,0], 
       {
-        up: "w",
-        down: "s",
-        left: "a",
-        right: "d",
-        placeTile1: "1",
-        placeTile2: "2",
-        placeTile3: "3",
-      }
-      )
+        up: "i",
+        down: "k",
+        left: "j",
+        right: "l",
+        placeTile1: "q",
+        placeTile2: "w",
+        placeTile3: "e",
+        placeTile4: "r",
+        placeTile5: "t",
+      })
     const player2 = new Player(
       p5,
       1,
@@ -49,11 +50,12 @@ const GameSketch = () => {
         down: "ArrowDown",
         left: "ArrowLeft",
         right: "ArrowRight",
-        placeTile1: "8",
-        placeTile2: "9",
-        placeTile3: "0",
-      }
-      )
+        placeTile1: "1",
+        placeTile2: "2",
+        placeTile3: "3",
+        placeTile4: "4",
+        placeTile5: "5",
+      })
     const players = [player1, player2]
     const goalTiles = players.map(player => {
       const goalTileXPos = player.playerId === 1 ? 0 : settings.boardTileWidth - 1
@@ -85,11 +87,12 @@ const GameSketch = () => {
     const gameState = Game.getGameState()
     const {board, ball, players} = gameState
     if(board && ball && Array.isArray(players) && players.length > 0) {
-      p5.background(0);
+      p5.background(25,12,38);
       board.draw()
       players.forEach((player) => player.draw())
       ball.draw()
     }
+    // console.log(Math.floor(p5.frameRate()))
   };
 
   const windowResized = (p5:p5Types) => {
@@ -112,7 +115,14 @@ const GameSketch = () => {
     return false
   }
 
-  return (<Sketch setup={setup} draw={draw} windowResized={windowResized} keyPressed={keyPressed}/>); 
+  return (
+    <Sketch 
+      setup={setup}
+      draw={draw}
+      windowResized={windowResized}
+      keyPressed={keyPressed}
+      />
+  ); 
 }
 
 export default React.memo(GameSketch, () => false)

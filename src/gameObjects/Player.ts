@@ -5,7 +5,6 @@ import GameObject from './GameObject'
 import {Howl} from 'howler'
 import Game from './Game'
 
-const BANK_SIZE = 3;
 
 type Controls = {
   up: string,
@@ -15,6 +14,8 @@ type Controls = {
   placeTile1: string,
   placeTile2: string,
   placeTile3: string,
+  placeTile4: string,
+  placeTile5: string,
 }
 
 export default class Player extends GameObject {
@@ -43,7 +44,8 @@ export default class Player extends GameObject {
     this.color = color;
     this.controls = controls;
     this.score = 0;
-    this.initQueueAndBank(10)
+    const {feedSize} = Game.getGameSettings()
+    this.initQueueAndBank(feedSize)
     this.initialCursorPosition = startPosition.copy()
     
     // Shoot the laser!
@@ -54,16 +56,17 @@ export default class Player extends GameObject {
         reflect: [8500, 500],
       }
     });
-    this.sound.play('load');
+    // this.sound.play('load');
   }
 
   initQueueAndBank = (numTiles:number) => {
+    const {bankSize} = Game.getGameSettings()
     const p5 = this.p5;
     for(let i = 0; i < numTiles; i++) {
       this.feed.enqueue(new Tile(p5, p5.createVector(0,0), this));
     }
 
-    for(let j = 0; j < BANK_SIZE; j++) {
+    for(let j = 0; j < bankSize; j++) {
       this.bank.push(new Tile(p5, p5.createVector(0,0), this));
     }
   }
@@ -82,6 +85,10 @@ export default class Player extends GameObject {
       this.placeTile(1);
     } else if(key === this.controls.placeTile3) {
       this.placeTile(2);
+    }else if(key === this.controls.placeTile4) {
+      this.placeTile(3);
+    }else if(key === this.controls.placeTile5) {
+      this.placeTile(4);
     }
   }
 
@@ -115,8 +122,9 @@ export default class Player extends GameObject {
 
   givePlayerNewTile() {
     const p5 = this.p5;
+    const {bankSize} = Game.getGameSettings()
     const bankCopy = this.bank.filter((el) => el !== undefined) 
-    if(bankCopy.length < BANK_SIZE) {
+    if(bankCopy.length < bankSize) {
       const emptyIndex = this.bank.findIndex((el) => el === undefined)
       this.bank[emptyIndex] = new Tile(p5, p5.createVector(0,0), this);
     } else {

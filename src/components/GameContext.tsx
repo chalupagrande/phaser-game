@@ -4,11 +4,14 @@ import Board from '../gameObjects/Board'
 import Player from '../gameObjects/Player'
 
 export const initialGameSettings = {
-  tileSize: 80,
+  tileSize: 70,
   boardTileWidth: 11,
   boardTileHeight: 5,
   initialBallSpeed: 1,
-  ballSize: 20,
+  ballSize: 40,
+  showTileAction: true,
+  bankSize: 3,
+  feedSize: 20,
 }
 export type GameSettings = typeof initialGameSettings
 

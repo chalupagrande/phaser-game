@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tile } from '../../gameObjects/Tiles'
+import Tile from '../../gameObjects/Tile'
 import { BankTile } from './BankTile'
 import './Bank.css'
 

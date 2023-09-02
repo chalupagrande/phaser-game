@@ -1,6 +1,7 @@
 import p5Types from "p5";
 import Tile from "./Tile";
 import Game from './Game'
+import sounds  from "../utils/Sounds";
 
 // TODO: figure out how to make this the type of TileTypes object
 // to ensure type safety
@@ -11,7 +12,6 @@ export type TileTypeType = {
   draw: (p5:p5Types, tile:Tile) => void
 }
 
-
 const TRI_SIZE = 15
 
 export const TileTypes = {
@@ -21,6 +21,7 @@ export const TileTypes = {
     action: (p5:p5Types, tile:Tile):boolean => {
       const {ball} = Game.getGameState()
       ball.direction = p5.createVector(0,-1)
+      sounds.play('yes')
       return false
     },
     draw: (p5:p5Types, tile:Tile) => {
@@ -42,6 +43,7 @@ export const TileTypes = {
     action: (p5:p5Types, tile:Tile):boolean => {
       const {ball} = Game.getGameState()
       ball.direction = p5.createVector(1,0)
+      sounds.play('meh')
       return false
     },
     draw: (p5:p5Types, tile:Tile) => {
@@ -64,6 +66,7 @@ export const TileTypes = {
     action: (p5:p5Types, tile:Tile):boolean => {
       const {ball} = Game.getGameState()
       ball.direction = p5.createVector(0,1)
+      sounds.play('pop')
       return false
     },
     draw: (p5:p5Types, tile:Tile) => {
@@ -84,6 +87,7 @@ export const TileTypes = {
     isPermanent: false,
     action: (p5:p5Types, tile:Tile):boolean => {
       const {ball} = Game.getGameState()
+      sounds.play('ganggang')
       ball.direction = p5.createVector(-1,0)
       return false
     },

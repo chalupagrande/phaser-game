@@ -56,6 +56,10 @@ const SettingsScreen = () => {
           <label htmlFor="feedSize">Feed Size</label>
           <input id="feedSize" value={settings.feedSize} onChange={handleChangeNum}></input>
         </li>
+        <li className="column">
+          <label htmlFor="boardQueueSize">Board Queue Size</label>
+          <input id="boardQueueSize" value={settings.boardQueueSize} onChange={handleChangeNum}></input>
+        </li>
       </ul>
       <div className="column">
         <button className="start" onClick={onSave}>Save Settings</button>

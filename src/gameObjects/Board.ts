@@ -1,4 +1,5 @@
 import { Queue } from "../utils/Queue";
+import Game from "./Game";
 import GameObject from "./GameObject";
 import Tile from "./Tile";
 import p5Types from "p5";
@@ -25,10 +26,11 @@ export default class Board extends GameObject{
   }
 
   initBoard = () => {
+    const {boardQueueSize} = Game.getGameSettings()
     for (let i = 0; i < this.xSize; i++) {
       this.board.push([]);
       for (let j = 0; j < this.ySize; j++) {
-        this.board[i].push(new Queue<Tile>());
+        this.board[i].push(new Queue<Tile>(boardQueueSize));
       }
     } 
     this.goalTiles.forEach(tile => {

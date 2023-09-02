@@ -2,8 +2,8 @@ import { Queue } from "../utils/Queue"
 import Tile from "./Tile"
 import p5Types from "p5";
 import GameObject from './GameObject'
-import {Howl} from 'howler'
 import Game from './Game'
+import sounds from '../utils/Sounds'
 
 
 type Controls = {
@@ -27,7 +27,6 @@ export default class Player extends GameObject {
   bank: (Tile | undefined)[];
   score: number;
   initialCursorPosition: p5Types.Vector;
-  sound: Howl;
 
   constructor(
       p5: p5Types,
@@ -47,16 +46,7 @@ export default class Player extends GameObject {
     const {feedSize} = Game.getGameSettings()
     this.initQueueAndBank(feedSize)
     this.initialCursorPosition = startPosition.copy()
-    
-    // Shoot the laser!
-    this.sound = new Howl({
-      src: ['/phaser_sounds.m4a'],
-      sprite: {
-        load: [1000, 1000],
-        reflect: [8500, 500],
-      }
-    });
-    // this.sound.play('load');
+
   }
 
   initQueueAndBank = (numTiles:number) => {
@@ -69,6 +59,8 @@ export default class Player extends GameObject {
     for(let j = 0; j < bankSize; j++) {
       this.bank.push(new Tile(p5, p5.createVector(0,0), this));
     }
+
+    sounds.play('ganggang')
   }
 
   handleKeyPress = (key:string) => {
@@ -141,7 +133,8 @@ export default class Player extends GameObject {
     this.feed = new Queue<Tile>();
     this.bank = []
     this.cursor = this.initialCursorPosition
-    this.initQueueAndBank(10)
+    const {feedSize} = Game.getGameSettings()
+    this.initQueueAndBank(feedSize)
     Game.updateHUD()
   }
 

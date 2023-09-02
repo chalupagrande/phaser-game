@@ -12,6 +12,7 @@ export const initialGameSettings = {
   showTileAction: true,
   bankSize: 3,
   feedSize: 20,
+  boardQueueSize: 11,
 }
 export type GameSettings = typeof initialGameSettings
 

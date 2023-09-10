@@ -4,12 +4,11 @@ export class Sounds {
   sound: Howl;
   constructor(){
     this.sound = new Howl({
-      src: ['/phaser_sounds_2.m4a'],
+      src: ['/phaser_sounds.m4a'],
       sprite: {
-        yes: [1000, 800],
-        meh: [3500, 800],
-        pop: [4500, 800],
-        ganggang: [10000,800]
+        tick: [500, 500],
+        woosh: [1200, 500],
+        goal: [2000, 700],
       }
     });
   }

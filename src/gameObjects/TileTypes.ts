@@ -21,7 +21,7 @@ export const TileTypes = {
     action: (p5:p5Types, tile:Tile):boolean => {
       const {ball} = Game.getGameState()
       ball.direction = p5.createVector(0,-1)
-      sounds.play('yes')
+      sounds.play('tick')
       return false
     },
     draw: (p5:p5Types, tile:Tile) => {
@@ -43,7 +43,7 @@ export const TileTypes = {
     action: (p5:p5Types, tile:Tile):boolean => {
       const {ball} = Game.getGameState()
       ball.direction = p5.createVector(1,0)
-      sounds.play('meh')
+      sounds.play('tick')
       return false
     },
     draw: (p5:p5Types, tile:Tile) => {
@@ -66,7 +66,7 @@ export const TileTypes = {
     action: (p5:p5Types, tile:Tile):boolean => {
       const {ball} = Game.getGameState()
       ball.direction = p5.createVector(0,1)
-      sounds.play('pop')
+      sounds.play('tick')
       return false
     },
     draw: (p5:p5Types, tile:Tile) => {
@@ -87,7 +87,7 @@ export const TileTypes = {
     isPermanent: false,
     action: (p5:p5Types, tile:Tile):boolean => {
       const {ball} = Game.getGameState()
-      sounds.play('ganggang')
+      sounds.play('tick')
       ball.direction = p5.createVector(-1,0)
       return false
     },
@@ -110,6 +110,7 @@ export const TileTypes = {
     action: (p5:p5Types, tile:Tile):boolean => {
       const {ball} = Game.getGameState()
       ball.speed = ball.speed * 1.2
+      sounds.play('woosh')
       return false
     },
     draw: (p5:p5Types, tile:Tile) => {
@@ -132,6 +133,7 @@ export const TileTypes = {
     isPermanent: true,
     action: (p5:p5Types, tile:Tile):boolean => {
       const {ball, board, players} = Game.getGameState()
+      sounds.play('goal')
       tile.owner.incrementScore()
       players.forEach(player => player.reset())
       ball.reset()

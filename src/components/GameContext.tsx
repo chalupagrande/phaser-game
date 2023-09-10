@@ -26,8 +26,8 @@ export const initialGameState ={
 export const initialGameContext = {
   gameState: initialGameState,
   gameSettings: initialGameSettings,
-  updateGameState: (newGameState: any) => {},
-  updateGameSettings: (newGameSettings: any) => {},
+  updateGameState: (newGameState: any) => { console.log("updateGameState", newGameState) },
+  updateGameSettings: (newGameSettings:any) => {console.log(newGameSettings)},
 }
 
 

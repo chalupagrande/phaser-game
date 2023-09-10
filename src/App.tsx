@@ -4,6 +4,7 @@ import { Route } from 'wouter'
 import StartScreen from './screens/StartScreen'
 import SettingsScreen from './screens/SettingsScreen'
 import GameScreen from './screens/GameScreen'
+import Matchmaking from './screens/Matchmaking'
 
 function App() {  
   return (
@@ -16,6 +17,9 @@ function App() {
       </Route>
       <Route path="/settings">
         <SettingsScreen/>
+      </Route>
+      <Route path="/matchmaking">
+        <Matchmaking/>
       </Route>
     </GameContextProvider>
   )

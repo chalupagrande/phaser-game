@@ -69,7 +69,9 @@ export default class Board extends GameObject{
       for(let j = 0; j < this.ySize; j++) {
         p5.push()
         p5.noFill();
+        // @ts-ignore
         p5.drawingContext.shadowBlur = 20;
+        // @ts-ignore
         p5.drawingContext.shadowColor = `rgb(145,26,238)`;
         p5.stroke(145,26,238)
         p5.rect(i * this.tileSize, j * this.tileSize, this.tileSize, this.tileSize);

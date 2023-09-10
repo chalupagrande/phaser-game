@@ -75,15 +75,19 @@ export default class Ball extends GameObject{
     const {board} = Game.getGameState()
     const p5 = this.p5;
     const {tileSize} = Game.getGameSettings()
-    const color = this.color.levels
+    const color = this.color
     // render
     p5.translate(tileSize/2, tileSize/2)
     p5.noStroke()
     p5.fill(this.color);
     p5.push()
+    // @ts-ignore
     p5.drawingContext.shadowOffsetX = 0;
+    // @ts-ignore
     p5.drawingContext.shadowOffsetY = 0;
+    // @ts-ignore
     p5.drawingContext.shadowBlur = 20;
+    // @ts-ignore
     p5.drawingContext.shadowColor = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
     p5.circle(this.position.x, this.position.y, this.ballDiameter);
     p5.pop()
